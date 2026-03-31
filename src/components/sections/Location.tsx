@@ -45,8 +45,8 @@ export function Location() {
           </p>
         </div>
 
-        <div className="grid lg:grid-cols-2 gap-8 items-center">
-          <Card className="p-8 bg-card/90 backdrop-blur">
+        <div className="max-w-3xl mx-auto">
+          <Card className="p-8 md:p-10 bg-card/90 backdrop-blur">
             <h3 className="font-playfair text-2xl font-bold text-foreground mb-4">
               {venueName}
             </h3>
@@ -77,19 +77,6 @@ export function Location() {
                 </Button>
               </div>
             </div>
-          </Card>
-
-          <Card className="p-2 bg-card/90 backdrop-blur overflow-hidden h-[400px]">
-            <iframe
-              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1772.3!2d-55.9393798!3d-27.3663442!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x9457bdfef28b1ac5%3A0x3ac4b81af4a2672!2sEspacio%20Recreativo%20IPLyC!5e0!3m2!1ses!2sar!4v1711800000000"
-              width="100%"
-              height="100%"
-              style={{ border: 0 }}
-              allowFullScreen
-              loading="lazy"
-              referrerPolicy="no-referrer-when-downgrade"
-              className="rounded-lg"
-            />
           </Card>
         </div>
       </div>

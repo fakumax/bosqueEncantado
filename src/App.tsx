@@ -1,4 +1,3 @@
-import { useState, useEffect } from 'react'
 import { Hero } from '@/components/sections/Hero'
 import { Countdown } from '@/components/sections/Countdown'
 import { EventDetails } from '@/components/sections/EventDetails'
@@ -7,61 +6,20 @@ import { RSVP } from '@/components/sections/RSVP'
 import { PhotoGallery } from '@/components/sections/PhotoGallery'
 import { GiftRegistry } from '@/components/sections/GiftRegistry'
 import { MusicPlaylist } from '@/components/sections/MusicPlaylist'
-import { Navigation } from '@/components/Navigation'
 import { Toaster } from '@/components/ui/sonner'
 import { Butterflies } from '@/components/effects/Butterflies'
 import { MagicParticles } from '@/components/effects/MagicParticles'
 import { MagicalFireflies } from '@/components/effects/MagicalFireflies'
-import Lenis from 'lenis'
-import gsap from 'gsap'
-import { ScrollTrigger } from 'gsap/ScrollTrigger'
-
-gsap.registerPlugin(ScrollTrigger)
+import { BackgroundMusic } from '@/components/BackgroundMusic'
 
 function App() {
-  const [isMenuOpen, setIsMenuOpen] = useState(false)
-
-  useEffect(() => {
-    // Lenis smooth scroll
-    const lenis = new Lenis({
-      duration: 0.8,
-      easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-      smoothWheel: true,
-      wheelMultiplier: 1.8,
-      touchMultiplier: 2.5,
-    })
-
-    // Connect Lenis to GSAP ScrollTrigger
-    lenis.on('scroll', ScrollTrigger.update)
-
-    gsap.ticker.add((time) => {
-      lenis.raf(time * 1000)
-    })
-    gsap.ticker.lagSmoothing(0)
-
-    // Snap to sections after the intro
-    ScrollTrigger.create({
-      snap: {
-        snapTo: '.presentation-slide',
-        duration: { min: 0.3, max: 0.6 },
-        delay: 0.1,
-        ease: 'power1.inOut',
-      },
-    })
-
-    return () => {
-      lenis.destroy()
-      gsap.ticker.remove(lenis.raf)
-    }
-  }, [])
-
   return (
     <div className="app-wrapper">
       <Toaster position="top-center" />
+      <BackgroundMusic />
       <MagicParticles />
       <MagicalFireflies />
       <Butterflies />
-      <Navigation isMenuOpen={isMenuOpen} setIsMenuOpen={setIsMenuOpen} />
 
       <main>
         <Hero />
@@ -77,7 +35,7 @@ function App() {
       <footer className="site-footer pb-8 pt-4">
         <div className="container mx-auto px-4 text-center">
           <p className="text-[#7aaa90] text-sm tracking-widest font-playfair flex items-center justify-center gap-1.5 flex-wrap">
-            Hecho con <span className="text-red-500">❤️</span> por{' '}
+            Hecho por{' '}
             <a 
               href="https://github.com/fakumax/" 
               target="_blank" 
@@ -85,6 +43,13 @@ function App() {
               className="text-accent hover:text-white transition-colors"
             >
               Facundo Vergara
+            </a> &  <a 
+              href="#" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="text-accent hover:text-white transition-colors"
+            >
+              Nina
             </a>{' '}
             © {new Date().getFullYear()}
           </p>

@@ -52,12 +52,12 @@ export function Countdown() {
     const ctx = gsap.context(() => {
       gsap.from(sectionRef.current, {
         opacity: 0,
-        y: 60,
-        duration: 1,
+        y: 40,
+        duration: 0.8,
         ease: 'power3.out',
         scrollTrigger: {
           trigger: sectionRef.current,
-          start: 'top 80%',
+          start: 'top bottom',
           toggleActions: 'play none none none',
         },
       })
@@ -108,6 +108,19 @@ export function Countdown() {
             onComplete={() => setIsEventPassed(true)}
           />
         </div>
+
+        <Card className="mt-12 p-8 bg-primary/5 border-2 border-primary/20 max-w-4xl mx-auto">
+          <div className="text-center">
+            <h3 className="font-playfair text-2xl font-bold text-foreground mb-3">
+              Una Celebración Especial
+            </h3>
+            <p className="text-foreground/80 max-w-3xl mx-auto">
+              Únete a nosotros para celebrar la mayoría de edad de Sofía en una velada mágica 
+              inspirada en los bosques encantados. Será una noche para recordar, llena de 
+              sorpresas, alegría y momentos inolvidables junto a familia y amigos.
+            </p>
+          </div>
+        </Card>
       </div>
     </section>
   )

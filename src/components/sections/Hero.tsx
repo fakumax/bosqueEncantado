@@ -28,11 +28,12 @@ export function Hero() {
           end: '+=1500',
           pin: viewportRef.current,
           scrub: 0.3,
-          onLeave: () => {
-            gsap.to('#main-nav', { autoAlpha: 1, y: 0, duration: 0.4, ease: 'power2.out' })
-          },
-          onEnterBack: () => {
-            gsap.to('#main-nav', { autoAlpha: 0, y: -20, duration: 0.3 })
+          anticipatePin: 1,
+          snap: {
+            snapTo: [0, 0.5, 1],
+            duration: { min: 0.2, max: 0.45 },
+            delay: 0.05,
+            ease: 'power1.inOut',
           },
         },
       })
@@ -82,14 +83,7 @@ export function Hero() {
         ease: 'power3.out',
       }, 0.5)
 
-      // ── Phase 6: Hold Sofía visible (0.62 → 0.85 = idle) ──
-
-      // ── Phase 7: Sofía fades out before unpin (spark stays visible) ──
-      tl.to(contentRef.current, {
-        opacity: 0, y: -40,
-        duration: 0.12,
-        ease: 'power2.in',
-      }, 0.88)
+      // Sofía stays visible from 0.5 to 1.0 — no fade out
     }, wrapperRef)
 
     return () => ctx.revert()
@@ -97,7 +91,6 @@ export function Hero() {
 
   return (
     <div ref={wrapperRef} id="inicio">
-      {/* This is pinned — everything happens inside one viewport */}
       <div ref={viewportRef} className="intro-viewport">
         {/* Background */}
         <div className="intro-viewport__bg" />
