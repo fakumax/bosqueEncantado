@@ -126,11 +126,17 @@ h2 {
     font-family: 'SofiaTitle', 'Cinzel Decorative', serif;
     font-size: clamp(3rem, 10vw, 7rem);
     line-height: 1.15;
-    color: $gold-shimmer;
-    text-shadow:
-      0 0 40px rgba(212, 200, 150, 0.3),
-      0 0 80px rgba(143, 212, 176, 0.1);
     letter-spacing: 0.02em;
+
+    /* Textura de oro ultra-realista */
+    background: url('https://img.freepik.com/free-photo/gold-texture-background_1373-353.jpg') center/cover;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    
+    /* Usamos drop-shadow para que funcione bien con el texto transparente y le de volumen + brillo */
+    filter: drop-shadow(2px 4px 8px rgba(0,0,0,0.6))
+            drop-shadow(0 0 40px rgba(212, 200, 150, 0.3));
   }
 }
 

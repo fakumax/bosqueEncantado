@@ -114,14 +114,14 @@ export function RSVP() {
 
             <div className="space-y-3">
               <Label className="text-base font-medium">¿Podrás asistir? *</Label>
-              <RadioGroup value={attending} onValueChange={setAttending}>
-                <div className="flex items-center space-x-3 p-4 rounded-lg border-2 border-border hover:border-accent transition-colors">
+              <RadioGroup value={attending} onValueChange={setAttending} className="flex gap-4">
+                <div className="flex items-center space-x-3 p-4 rounded-lg border-2 border-border hover:border-accent transition-colors flex-1">
                   <RadioGroupItem value="si" id="si" />
                   <Label htmlFor="si" className="cursor-pointer flex-1">
                     Sí, asistiré
                   </Label>
                 </div>
-                <div className="flex items-center space-x-3 p-4 rounded-lg border-2 border-border hover:border-accent transition-colors">
+                <div className="flex items-center space-x-3 p-4 rounded-lg border-2 border-border hover:border-accent transition-colors flex-1">
                   <RadioGroupItem value="no" id="no" />
                   <Label htmlFor="no" className="cursor-pointer flex-1">
                     No podré asistir

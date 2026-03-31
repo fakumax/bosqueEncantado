@@ -5,6 +5,8 @@ import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 
 gsap.registerPlugin(ScrollTrigger)
+ScrollTrigger.config({ ignoreMobileResize: true })
+ScrollTrigger.normalizeScroll(true)
 
 const curtainImage =
   'https://images.unsplash.com/photo-1487530811176-3780de880c2d?w=1920&h=1080&fit=crop&crop=center'
@@ -17,9 +19,32 @@ export function Hero() {
   const introRef = useRef<HTMLDivElement>(null)
   const messageRef = useRef<HTMLDivElement>(null)
   const contentRef = useRef<HTMLDivElement>(null)
+  
+  // Refs para las imágenes de 'Érase una vez'
+  const img1Ref = useRef<HTMLImageElement>(null)
+  const img2Ref = useRef<HTMLImageElement>(null)
+  const img3Ref = useRef<HTMLImageElement>(null)
 
   useEffect(() => {
     const ctx = gsap.context(() => {
+      // ── Animación Inicial de las imágenes ──
+      const tlIntro = gsap.timeline({ defaults: { ease: 'power2.inOut' } })
+      
+      // Estado inicial (oculto por las dudas aunque empiece en opacity 0 en CSS/JSX)
+      gsap.set([img1Ref.current, img2Ref.current, img3Ref.current], { opacity: 0 })
+      
+      tlIntro
+        // 1. Aparece el texto lentamente
+        .to(img1Ref.current, { opacity: 1, duration: 2 })
+        // 2. Aparecen las figuras con un pequeño zoom/destello (usando filter brightness/blur en el from)
+        .fromTo(img2Ref.current, 
+          { opacity: 0, scale: 0.9, filter: 'brightness(2) blur(10px)' }, 
+          { opacity: 1, scale: 1, filter: 'brightness(1) blur(0px)', duration: 1.5, ease: 'power2.out' }, 
+          '-=0.5' // Empieza 0.5s antes de que termine el primer fade-in
+        )
+        // 3. Transición a la imagen completa por encima (sin desaparecer las de abajo para que no parpadee)
+        .to(img3Ref.current, { opacity: 1, duration: 0.5 }, '+=1')
+
       // Pin the viewport for the entire intro sequence
       const tl = gsap.timeline({
         scrollTrigger: {
@@ -27,7 +52,8 @@ export function Hero() {
           start: 'top top',
           end: '+=1500',
           pin: viewportRef.current,
-          scrub: 0.3,
+          pinType: 'fixed',
+          scrub: 0.5,
           anticipatePin: 1,
           snap: {
             snapTo: [0, 0.5, 1],
@@ -104,8 +130,25 @@ export function Hero() {
         </div>
 
         {/* Érase una vez... */}
-        <div ref={introRef} className="intro-text">
-          <p className="intro-text__title">Érase<br />una vez...</p>
+        <div ref={introRef} className="intro-text flex items-center justify-center relative w-full h-full">
+          <img 
+            ref={img1Ref} 
+            src="/img/erase1.webp" 
+            alt="Érase una vez" 
+            className="absolute shrink-0 w-[80%] max-w-[600px] object-contain opacity-0" 
+          />
+          <img 
+            ref={img2Ref} 
+            src="/img/erase2.webp" 
+            alt="Figuras destellos" 
+            className="absolute shrink-0 w-[80%] max-w-[600px] object-contain opacity-0" 
+          />
+          <img 
+            ref={img3Ref} 
+            src="/img/erase3.webp" 
+            alt="Érase una vez completo" 
+            className="absolute shrink-0 w-[80%] max-w-[600px] object-contain opacity-0 z-10 drop-shadow-lg" 
+          />
         </div>
 
         {/* Princess message */}
