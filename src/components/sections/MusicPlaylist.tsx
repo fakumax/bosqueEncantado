@@ -28,7 +28,7 @@ export function MusicPlaylist() {
   const spotifyPlaylistId = '37i9dQZF1DXcBWIGoYBM5M'
 
   return (
-    <section ref={sectionRef} id="musica" className="py-20 px-4">
+    <section ref={sectionRef} id="musica" className="presentation-slide px-4">
       <div className="container mx-auto max-w-4xl">
         <div className="text-center mb-12">
           <div className="inline-flex items-center justify-center mb-4">

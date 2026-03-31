@@ -31,7 +31,7 @@ export function Location() {
   const mapsUrl = 'https://www.google.com/maps/place/Espacio+Recreativo+IPLyC/@-27.3663442,-55.9393798,17z/data=!3m1!4b1!4m6!3m5!1s0x9457bdfef28b1ac5:0x3ac4b81af4a2672!8m2!3d-27.3663442!4d-55.9393798!16s%2Fg%2F11d_7sw5f4'
 
   return (
-    <section ref={sectionRef} id="ubicacion" className="py-20 px-4">
+    <section ref={sectionRef} id="ubicacion" className="presentation-slide px-4">
       <div className="container mx-auto max-w-6xl">
         <div className="text-center mb-12">
           <div className="inline-flex items-center justify-center mb-4">

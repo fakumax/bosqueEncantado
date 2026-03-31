@@ -49,7 +49,7 @@ export function EventDetails() {
   ]
 
   return (
-    <section ref={sectionRef} id="detalles" className="py-20 px-4 bg-secondary/20">
+    <section ref={sectionRef} id="detalles" className="presentation-slide px-4">
       <div className="container mx-auto max-w-6xl">
         <div className="text-center mb-12">
           <h2 className="font-playfair text-3xl md:text-5xl font-bold text-foreground mb-4">

@@ -11,6 +11,7 @@ import { Navigation } from '@/components/Navigation'
 import { Toaster } from '@/components/ui/sonner'
 import { Butterflies } from '@/components/effects/Butterflies'
 import { MagicParticles } from '@/components/effects/MagicParticles'
+import { MagicalFireflies } from '@/components/effects/MagicalFireflies'
 import Lenis from 'lenis'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
@@ -38,6 +39,16 @@ function App() {
     })
     gsap.ticker.lagSmoothing(0)
 
+    // Snap to sections after the intro
+    ScrollTrigger.create({
+      snap: {
+        snapTo: '.presentation-slide',
+        duration: { min: 0.3, max: 0.6 },
+        delay: 0.1,
+        ease: 'power1.inOut',
+      },
+    })
+
     return () => {
       lenis.destroy()
       gsap.ticker.remove(lenis.raf)
@@ -48,6 +59,7 @@ function App() {
     <div className="app-wrapper">
       <Toaster position="top-center" />
       <MagicParticles />
+      <MagicalFireflies />
       <Butterflies />
       <Navigation isMenuOpen={isMenuOpen} setIsMenuOpen={setIsMenuOpen} />
 

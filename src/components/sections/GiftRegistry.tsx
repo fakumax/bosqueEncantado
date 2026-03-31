@@ -65,7 +65,7 @@ export function GiftRegistry() {
   }
 
   return (
-    <section ref={sectionRef} id="regalos" className="py-20 px-4 bg-secondary/20">
+    <section ref={sectionRef} id="regalos" className="presentation-slide px-4">
       <div className="container mx-auto max-w-4xl">
         <div className="text-center mb-12">
           <div className="inline-flex items-center justify-center mb-4">

@@ -3,50 +3,35 @@ import { Card } from '@/components/ui/card'
 import { Clock } from '@phosphor-icons/react'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import FlipClockCountdown from '@leenguyen/react-flip-clock-countdown'
+import '@leenguyen/react-flip-clock-countdown/dist/index.css'
 
 gsap.registerPlugin(ScrollTrigger)
 
-interface TimeLeft {
-  days: number
-  hours: number
-  minutes: number
-  seconds: number
-}
-
 export function Countdown() {
-  const [timeLeft, setTimeLeft] = useState<TimeLeft>({ days: 0, hours: 0, minutes: 0, seconds: 0 })
   const [isEventPassed, setIsEventPassed] = useState(false)
+  const targetDate = new Date('2026-06-06T21:00:00-03:00').getTime()
+  
+  const [isMobile, setIsMobile] = useState(false)
 
   useEffect(() => {
-    const calculateTimeLeft = () => {
-      const eventDate = new Date('2026-06-06T21:00:00-03:00')
-      const now = new Date()
-      const difference = eventDate.getTime() - now.getTime()
-
-      if (difference <= 0) {
-        setIsEventPassed(true)
-        return { days: 0, hours: 0, minutes: 0, seconds: 0 }
-      }
-
-      return {
-        days: Math.floor(difference / (1000 * 60 * 60 * 24)),
-        hours: Math.floor((difference / (1000 * 60 * 60)) % 24),
-        minutes: Math.floor((difference / 1000 / 60) % 60),
-        seconds: Math.floor((difference / 1000) % 60),
-      }
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 640)
     }
-
-    setTimeLeft(calculateTimeLeft())
-    const timer = setInterval(() => {
-      setTimeLeft(calculateTimeLeft())
-    }, 1000)
-
-    return () => clearInterval(timer)
+    handleResize() // check on mount
+    window.addEventListener('resize', handleResize)
+    return () => window.removeEventListener('resize', handleResize)
   }, [])
+
+  useEffect(() => {
+    if (new Date().getTime() >= targetDate) {
+      setIsEventPassed(true)
+    }
+  }, [targetDate])
 
   if (isEventPassed) {
     return (
-      <section id="countdown" className="py-16 px-4">
+      <section id="countdown" className="presentation-slide px-4">
         <div className="container mx-auto max-w-4xl text-center">
           <Card className="p-8 bg-card/80 backdrop-blur">
             <h2 className="font-playfair text-3xl font-bold text-foreground mb-4">
@@ -81,7 +66,7 @@ export function Countdown() {
   }, [])
 
   return (
-    <section ref={sectionRef} id="countdown" className="py-16 px-4">
+    <section ref={sectionRef} id="countdown" className="presentation-slide px-4">
       <div className="container mx-auto max-w-6xl">
         <div className="text-center mb-12">
           <div className="inline-flex items-center gap-2 mb-4">
@@ -95,27 +80,33 @@ export function Countdown() {
           </p>
         </div>
 
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
-          {[
-            { label: 'Días', value: timeLeft.days },
-            { label: 'Horas', value: timeLeft.hours },
-            { label: 'Minutos', value: timeLeft.minutes },
-            { label: 'Segundos', value: timeLeft.seconds },
-          ].map((item) => (
-            <Card
-              key={item.label}
-              className="p-6 md:p-8 bg-card/80 backdrop-blur border-2 border-border hover:border-accent transition-all"
-            >
-              <div className="text-center">
-                <div className="font-playfair text-4xl md:text-6xl font-bold text-accent mb-2">
-                  {String(item.value).padStart(2, '0')}
-                </div>
-                <div className="text-sm md:text-base font-medium text-muted-foreground uppercase tracking-wide">
-                  {item.label}
-                </div>
-              </div>
-            </Card>
-          ))}
+        <div className="flex justify-center items-center w-full">
+          <FlipClockCountdown 
+            to={targetDate} 
+            labels={['Días', 'Horas', 'Minutos', 'Segundos']}
+            labelStyle={{ 
+              fontSize: isMobile ? 9 : 13, 
+              fontWeight: 500, 
+              textTransform: 'uppercase', 
+              color: '#a0b8a8', 
+              fontFamily: '"Cormorant Garamond", serif',
+              marginTop: isMobile ? '6px' : '12px'
+            }}
+            digitBlockStyle={{ 
+              width: isMobile ? 30 : 60, 
+              height: isMobile ? 45 : 85, 
+              fontSize: isMobile ? 24 : 45, 
+              backgroundColor: 'rgba(25, 65, 45, 0.7)', 
+              color: '#d4c896', 
+              boxShadow: '0 4px 15px rgba(0,0,0,0.4)', 
+              fontFamily: '"Cinzel Decorative", serif', 
+              borderRadius: isMobile ? '4px' : '8px' 
+            }}
+            dividerStyle={{ color: 'rgba(143, 212, 176, 0.2)', height: 1 }}
+            separatorStyle={{ color: '#d4c896', size: isMobile ? '3px' : '5px' }}
+            duration={0.5}
+            onComplete={() => setIsEventPassed(true)}
+          />
         </div>
       </div>
     </section>
