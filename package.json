@@ -1,0 +1,45 @@
+{
+    "name": "bosque-encantado",
+    "private": true,
+    "version": "0.0.0",
+    "type": "module",
+    "scripts": {
+        "dev": "vite",
+        "build": "tsc -b --noCheck && vite build",
+        "lint": "eslint .",
+        "preview": "vite preview"
+    },
+    "dependencies": {
+        "@phosphor-icons/react": "^2.1.7",
+        "@radix-ui/react-dialog": "^1.1.6",
+        "@radix-ui/react-label": "^2.1.2",
+        "@radix-ui/react-radio-group": "^1.2.3",
+        "@radix-ui/react-slot": "^1.1.2",
+        "@tailwindcss/vite": "^4.2.2",
+        "class-variance-authority": "^0.7.1",
+        "clsx": "^2.1.1",
+        "framer-motion": "^12.38.0",
+        "lucide-react": "^0.484.0",
+        "react": "^19.0.0",
+        "react-dom": "^19.0.0",
+        "react-error-boundary": "^6.0.0",
+        "sonner": "^2.0.1",
+        "tailwind-merge": "^3.0.2",
+        "tw-animate-css": "^1.2.4"
+    },
+    "devDependencies": {
+        "@eslint/js": "^9.21.0",
+        "@types/react": "^19.0.10",
+        "@types/react-dom": "^19.0.4",
+        "@vitejs/plugin-react-swc": "^4.3.0",
+        "eslint": "^9.28.0",
+        "eslint-plugin-react-hooks": "^5.2.0",
+        "eslint-plugin-react-refresh": "^0.4.19",
+        "globals": "^16.0.0",
+        "sass-embedded": "^1.98.0",
+        "tailwindcss": "^4.2.2",
+        "typescript": "~5.7.2",
+        "typescript-eslint": "^8.38.0",
+        "vite": "^8.0.3"
+    }
+}

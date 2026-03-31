@@ -1,0 +1,81 @@
+import { Card } from '@/components/ui/card'
+import { Calendar, Clock, Sparkle, Dress } from '@phosphor-icons/react'
+
+export function EventDetails() {
+  const details = [
+    {
+      icon: Calendar,
+      title: 'Fecha',
+      value: 'Sábado, 6 de Junio de 2026',
+    },
+    {
+      icon: Clock,
+      title: 'Hora',
+      value: '20:00 hs (UTC-3)',
+    },
+    {
+      icon: Dress,
+      title: 'Código de Vestimenta',
+      value: 'Elegante Formal',
+    },
+    {
+      icon: Sparkle,
+      title: 'Tema',
+      value: 'Bosque Encantado',
+    },
+  ]
+
+  return (
+    <section id="detalles" className="py-20 px-4 bg-secondary/20">
+      <div className="container mx-auto max-w-6xl">
+        <div className="text-center mb-12">
+          <h2 className="font-playfair text-3xl md:text-5xl font-bold text-primary mb-4">
+            Detalles del Evento
+          </h2>
+          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+            Prepárate para una noche mágica llena de alegría, música y momentos inolvidables
+          </p>
+        </div>
+
+        <div className="grid md:grid-cols-2 gap-6">
+          {details.map((detail) => {
+            const Icon = detail.icon
+            return (
+              <Card
+                key={detail.title}
+                className="p-6 bg-card/90 backdrop-blur hover:scale-105 transition-transform duration-300"
+              >
+                <div className="flex items-start gap-4">
+                  <div className="p-3 bg-accent/20 rounded-lg">
+                    <Icon size={32} weight="duotone" className="text-accent" />
+                  </div>
+                  <div className="flex-1">
+                    <h3 className="font-semibold text-foreground text-lg mb-1">
+                      {detail.title}
+                    </h3>
+                    <p className="text-muted-foreground">
+                      {detail.value}
+                    </p>
+                  </div>
+                </div>
+              </Card>
+            )
+          })}
+        </div>
+
+        <Card className="mt-8 p-8 bg-primary/5 border-2 border-primary/20">
+          <div className="text-center">
+            <h3 className="font-playfair text-2xl font-bold text-primary mb-3">
+              Una Celebración Especial
+            </h3>
+            <p className="text-foreground/80 max-w-3xl mx-auto">
+              Únete a nosotros para celebrar la mayoría de edad de Sofía en una velada mágica 
+              inspirada en los bosques encantados. Será una noche para recordar, llena de 
+              sorpresas, alegría y momentos inolvidables junto a familia y amigos.
+            </p>
+          </div>
+        </Card>
+      </div>
+    </section>
+  )
+}
