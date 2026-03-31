@@ -1,20 +1,43 @@
+import { useEffect, useRef } from 'react'
 import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { MapPin, NavigationArrow } from '@phosphor-icons/react'
+import gsap from 'gsap'
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
+
+gsap.registerPlugin(ScrollTrigger)
 
 export function Location() {
+  const sectionRef = useRef<HTMLElement>(null)
+
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      gsap.from(sectionRef.current, {
+        opacity: 0,
+        y: 60,
+        duration: 1,
+        ease: 'power3.out',
+        scrollTrigger: {
+          trigger: sectionRef.current,
+          start: 'top 80%',
+          toggleActions: 'play none none none',
+        },
+      })
+    }, sectionRef)
+    return () => ctx.revert()
+  }, [])
   const venueName = 'Salón de Eventos Jardín Mágico'
   const address = 'Av. Principal 1234, Ciudad de Buenos Aires'
   const mapsUrl = 'https://maps.google.com/?q=-34.6037,-58.3816'
 
   return (
-    <section id="ubicacion" className="py-20 px-4">
+    <section ref={sectionRef} id="ubicacion" className="py-20 px-4">
       <div className="container mx-auto max-w-6xl">
         <div className="text-center mb-12">
           <div className="inline-flex items-center justify-center mb-4">
             <MapPin size={40} weight="duotone" className="text-accent" />
           </div>
-          <h2 className="font-playfair text-3xl md:text-5xl font-bold text-primary mb-4">
+          <h2 className="font-playfair text-3xl md:text-5xl font-bold text-foreground mb-4">
             Ubicación
           </h2>
           <p className="text-lg text-muted-foreground">
@@ -24,7 +47,7 @@ export function Location() {
 
         <div className="grid lg:grid-cols-2 gap-8 items-center">
           <Card className="p-8 bg-card/90 backdrop-blur">
-            <h3 className="font-playfair text-2xl font-bold text-primary mb-4">
+            <h3 className="font-playfair text-2xl font-bold text-foreground mb-4">
               {venueName}
             </h3>
             

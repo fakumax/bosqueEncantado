@@ -1,9 +1,13 @@
-import { useState } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Camera, Image as ImageIcon, X } from '@phosphor-icons/react'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
 import { toast } from 'sonner'
+import gsap from 'gsap'
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
+
+gsap.registerPlugin(ScrollTrigger)
 
 interface Photo {
   id: string
@@ -13,10 +17,28 @@ interface Photo {
 }
 
 export function PhotoGallery() {
+  const sectionRef = useRef<HTMLElement>(null)
   const [photos, setPhotos] = useState<Photo[]>([])
   const [uploaderName, setUploaderName] = useState('')
   const [isUploading, setIsUploading] = useState(false)
   const [dialogOpen, setDialogOpen] = useState(false)
+
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      gsap.from(sectionRef.current, {
+        opacity: 0,
+        y: 60,
+        duration: 1,
+        ease: 'power3.out',
+        scrollTrigger: {
+          trigger: sectionRef.current,
+          start: 'top 80%',
+          toggleActions: 'play none none none',
+        },
+      })
+    }, sectionRef)
+    return () => ctx.revert()
+  }, [])
 
   const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
@@ -68,13 +90,13 @@ export function PhotoGallery() {
   }
 
   return (
-    <section id="fotos" className="py-20 px-4">
+    <section ref={sectionRef} id="fotos" className="py-20 px-4">
       <div className="container mx-auto max-w-6xl">
         <div className="text-center mb-12">
           <div className="inline-flex items-center justify-center mb-4">
             <Camera size={40} weight="duotone" className="text-accent" />
           </div>
-          <h2 className="font-playfair text-3xl md:text-5xl font-bold text-primary mb-4">
+          <h2 className="font-playfair text-3xl md:text-5xl font-bold text-foreground mb-4">
             Galería de Fotos
           </h2>
           <p className="text-lg text-muted-foreground mb-6">

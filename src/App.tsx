@@ -12,22 +12,45 @@ import { Toaster } from '@/components/ui/sonner'
 import { Butterflies } from '@/components/effects/Butterflies'
 import { FloatingFlowers } from '@/components/effects/FloatingFlowers'
 import { MagicParticles } from '@/components/effects/MagicParticles'
+import Lenis from 'lenis'
+import gsap from 'gsap'
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
+
+gsap.registerPlugin(ScrollTrigger)
 
 function App() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
 
   useEffect(() => {
-    document.documentElement.classList.add('scroll-smooth')
+    // Lenis smooth scroll
+    const lenis = new Lenis({
+      duration: 1.2,
+      easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      smoothWheel: true,
+    })
+
+    // Connect Lenis to GSAP ScrollTrigger
+    lenis.on('scroll', ScrollTrigger.update)
+
+    gsap.ticker.add((time) => {
+      lenis.raf(time * 1000)
+    })
+    gsap.ticker.lagSmoothing(0)
+
+    return () => {
+      lenis.destroy()
+      gsap.ticker.remove(lenis.raf)
+    }
   }, [])
 
   return (
-    <div className="min-h-screen bg-background forest-pattern">
+    <div className="app-wrapper">
       <Toaster position="top-center" />
       <MagicParticles />
       <Butterflies />
       <FloatingFlowers />
       <Navigation isMenuOpen={isMenuOpen} setIsMenuOpen={setIsMenuOpen} />
-      
+
       <main>
         <Hero />
         <Countdown />
@@ -39,9 +62,9 @@ function App() {
         <MusicPlaylist />
       </main>
 
-      <footer className="bg-primary/5 border-t border-border py-8">
+      <footer className="site-footer">
         <div className="container mx-auto px-4 text-center">
-          <p className="text-muted-foreground text-sm">
+          <p className="text-[#7aaa90] text-sm tracking-widest uppercase font-playfair">
             Celebrando momentos mágicos • Sofía 2026
           </p>
         </div>

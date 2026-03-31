@@ -40,7 +40,7 @@ export function Navigation({ isMenuOpen, setIsMenuOpen }: NavigationProps) {
     <>
       <nav
         className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-          isScrolled ? 'bg-background/95 backdrop-blur shadow-lg' : 'bg-transparent'
+          isScrolled ? 'bg-[#091a12]/95 backdrop-blur-lg shadow-lg shadow-black/20' : 'bg-transparent'
         }`}
       >
         <div className="container mx-auto px-4">
@@ -48,7 +48,7 @@ export function Navigation({ isMenuOpen, setIsMenuOpen }: NavigationProps) {
             <a
               href="#inicio"
               onClick={(e) => handleNavClick(e, '#inicio')}
-              className="font-playfair text-xl md:text-2xl font-bold text-primary"
+              className="font-playfair text-xl md:text-2xl font-bold text-accent"
             >
               Sofía
             </a>

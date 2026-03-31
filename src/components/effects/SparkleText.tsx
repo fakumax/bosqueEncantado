@@ -54,7 +54,7 @@ export function SparkleText({ text }: { text: string }) {
               width={sparkle.size}
               height={sparkle.size}
               viewBox="0 0 24 24"
-              fill="oklch(0.75 0.12 85)"
+              fill="#d4c896"
             >
               <path d="M12 0L14.59 9.41L24 12L14.59 14.59L12 24L9.41 14.59L0 12L9.41 9.41L12 0Z" />
             </svg>
@@ -62,7 +62,7 @@ export function SparkleText({ text }: { text: string }) {
         ))}
       </div>
 
-      <h1 className="font-playfair text-6xl md:text-7xl lg:text-8xl font-bold text-primary tracking-tight relative z-10">
+      <h1 className="font-playfair text-6xl md:text-7xl lg:text-8xl font-bold shimmer-text tracking-tight relative z-10">
         {letters.map((letter, i) => (
           <motion.span
             key={i}

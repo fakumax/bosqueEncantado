@@ -1,6 +1,10 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { Card } from '@/components/ui/card'
 import { Clock } from '@phosphor-icons/react'
+import gsap from 'gsap'
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
+
+gsap.registerPlugin(ScrollTrigger)
 
 interface TimeLeft {
   days: number
@@ -45,7 +49,7 @@ export function Countdown() {
       <section id="countdown" className="py-16 px-4">
         <div className="container mx-auto max-w-4xl text-center">
           <Card className="p-8 bg-card/80 backdrop-blur">
-            <h2 className="font-playfair text-3xl font-bold text-primary mb-4">
+            <h2 className="font-playfair text-3xl font-bold text-foreground mb-4">
               ¡La celebración ha llegado!
             </h2>
             <p className="text-muted-foreground">
@@ -57,14 +61,33 @@ export function Countdown() {
     )
   }
 
+  const sectionRef = useRef<HTMLElement>(null)
+
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      gsap.from(sectionRef.current, {
+        opacity: 0,
+        y: 60,
+        duration: 1,
+        ease: 'power3.out',
+        scrollTrigger: {
+          trigger: sectionRef.current,
+          start: 'top 80%',
+          toggleActions: 'play none none none',
+        },
+      })
+    }, sectionRef)
+    return () => ctx.revert()
+  }, [])
+
   return (
-    <section id="countdown" className="py-16 px-4">
+    <section ref={sectionRef} id="countdown" className="py-16 px-4">
       <div className="container mx-auto max-w-6xl">
         <div className="text-center mb-12">
           <div className="inline-flex items-center gap-2 mb-4">
             <Clock size={32} weight="bold" className="text-accent" />
           </div>
-          <h2 className="font-playfair text-3xl md:text-4xl font-bold text-primary mb-2">
+          <h2 className="font-playfair text-3xl md:text-4xl font-bold text-foreground mb-2">
             Cuenta Regresiva
           </h2>
           <p className="text-muted-foreground">

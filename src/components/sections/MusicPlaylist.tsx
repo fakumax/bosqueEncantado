@@ -1,17 +1,40 @@
+import { useEffect, useRef } from 'react'
 import { Card } from '@/components/ui/card'
 import { MusicNotes } from '@phosphor-icons/react'
+import gsap from 'gsap'
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
+
+gsap.registerPlugin(ScrollTrigger)
 
 export function MusicPlaylist() {
+  const sectionRef = useRef<HTMLElement>(null)
+
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      gsap.from(sectionRef.current, {
+        opacity: 0,
+        y: 60,
+        duration: 1,
+        ease: 'power3.out',
+        scrollTrigger: {
+          trigger: sectionRef.current,
+          start: 'top 80%',
+          toggleActions: 'play none none none',
+        },
+      })
+    }, sectionRef)
+    return () => ctx.revert()
+  }, [])
   const spotifyPlaylistId = '37i9dQZF1DXcBWIGoYBM5M'
 
   return (
-    <section id="musica" className="py-20 px-4">
+    <section ref={sectionRef} id="musica" className="py-20 px-4">
       <div className="container mx-auto max-w-4xl">
         <div className="text-center mb-12">
           <div className="inline-flex items-center justify-center mb-4">
             <MusicNotes size={40} weight="duotone" className="text-accent" />
           </div>
-          <h2 className="font-playfair text-3xl md:text-5xl font-bold text-primary mb-4">
+          <h2 className="font-playfair text-3xl md:text-5xl font-bold text-foreground mb-4">
             Lista de Reproducción
           </h2>
           <p className="text-lg text-muted-foreground">

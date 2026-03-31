@@ -1,7 +1,30 @@
+import { useEffect, useRef } from 'react'
 import { Card } from '@/components/ui/card'
 import { Calendar, Clock, Sparkle, Dress } from '@phosphor-icons/react'
+import gsap from 'gsap'
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
+
+gsap.registerPlugin(ScrollTrigger)
 
 export function EventDetails() {
+  const sectionRef = useRef<HTMLElement>(null)
+
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      gsap.from(sectionRef.current, {
+        opacity: 0,
+        y: 60,
+        duration: 1,
+        ease: 'power3.out',
+        scrollTrigger: {
+          trigger: sectionRef.current,
+          start: 'top 80%',
+          toggleActions: 'play none none none',
+        },
+      })
+    }, sectionRef)
+    return () => ctx.revert()
+  }, [])
   const details = [
     {
       icon: Calendar,
@@ -26,10 +49,10 @@ export function EventDetails() {
   ]
 
   return (
-    <section id="detalles" className="py-20 px-4 bg-secondary/20">
+    <section ref={sectionRef} id="detalles" className="py-20 px-4 bg-secondary/20">
       <div className="container mx-auto max-w-6xl">
         <div className="text-center mb-12">
-          <h2 className="font-playfair text-3xl md:text-5xl font-bold text-primary mb-4">
+          <h2 className="font-playfair text-3xl md:text-5xl font-bold text-foreground mb-4">
             Detalles del Evento
           </h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
@@ -65,7 +88,7 @@ export function EventDetails() {
 
         <Card className="mt-8 p-8 bg-primary/5 border-2 border-primary/20">
           <div className="text-center">
-            <h3 className="font-playfair text-2xl font-bold text-primary mb-3">
+            <h3 className="font-playfair text-2xl font-bold text-foreground mb-3">
               Una Celebración Especial
             </h3>
             <p className="text-foreground/80 max-w-3xl mx-auto">

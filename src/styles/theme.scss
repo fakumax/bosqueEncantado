@@ -1,44 +1,288 @@
-// Bosque Encantado - Theme Styles
-// Custom enchanted forest theme using SCSS
+// Bosque Encantado - Érase Una Vez Theme
+// Mint green dress + fairy tale storybook aesthetic
 
-// ─── Color Palette ───────────────────────────────────────
-$forest-green: oklch(0.45 0.08 155);
-$forest-green-light: oklch(0.72 0.06 145);
-$gold-accent: oklch(0.75 0.12 85);
-$cream-bg: oklch(0.97 0.01 85);
-$deep-green: oklch(0.35 0.08 155);
+// ─── Custom Font for Sofía name ──────────────────────────
+// Drop your font file (.woff2, .woff, .ttf, or .otf) into src/fonts/
+// and update the url + format below.
+@font-face {
+  font-family: 'SofiaTitle';
+  src: url('../fonts/OPTIEngraversOldEnglish.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
 
-// ─── Typography ──────────────────────────────────────────
+// ─── Color Palette (matching dress fabric) ───────────────
+$mint-deep: #091a12;
+$mint-dark: #0c2218;
+$mint-mid: #1a4a30;
+$mint-light: #8fd4b0;
+$mint-glow: #b8e8d0;
+$gold-shimmer: #d4c896;
+$gold-light: #e0d8aa;
+$cream-text: #f0ebe3;
+$sequin-white: #e8f0ec;
+$mist: rgba(143, 212, 176, 0.06);
+
+// ─── Base ────────────────────────────────────────────────
+html {
+  background: $mint-deep;
+}
+
 body {
   font-family: var(--font-outfit);
-  background: var(--background);
-  color: var(--foreground);
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 1.7;
+  background: $mint-deep;
+  color: $cream-text;
+  overflow-x: hidden;
 }
 
-h1,
-h2,
-.font-playfair {
+h1, h2, h3, .font-playfair {
   font-family: var(--font-playfair);
+  letter-spacing: 0.04em;
 }
 
-// ─── Custom Utilities ────────────────────────────────────
-.forest-pattern {
-  background-image:
-    radial-gradient(circle at 20% 30%, oklch(0.75 0.06 145 / 0.15) 0%, transparent 40%),
-    radial-gradient(circle at 80% 70%, oklch(0.70 0.08 155 / 0.12) 0%, transparent 40%),
-    radial-gradient(circle at 40% 80%, oklch(0.78 0.05 140 / 0.10) 0%, transparent 35%);
+h2 {
+  text-transform: uppercase;
 }
 
+// ─── App Wrapper ─────────────────────────────────────────
+.app-wrapper {
+  min-height: 100vh;
+  background: $mint-deep;
+  position: relative;
+}
+
+// ─── Flower Curtain (full-screen theater curtain) ────────
+.flower-curtain {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  pointer-events: none;
+  overflow: hidden;
+
+  &__half {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 50%;
+    overflow: hidden;
+    will-change: transform;
+
+    &--left {
+      left: 0;
+
+      .flower-curtain__image {
+        // Show the left half of the image
+        background-position: left center;
+      }
+    }
+
+    &--right {
+      right: 0;
+
+      .flower-curtain__image {
+        // Show the right half of the image
+        background-position: right center;
+      }
+    }
+  }
+
+  &__image {
+    width: 200%; // double width so each half shows 50% of image
+    height: 100%;
+    background-size: cover;
+    background-repeat: no-repeat;
+    filter: brightness(0.55) saturate(1.2);
+  }
+
+  // Subtle dark overlay for text readability
+  &__overlay {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(
+      ellipse at center,
+      rgba(9, 26, 18, 0.4) 0%,
+      transparent 70%
+    );
+    pointer-events: none;
+  }
+
+  // "Érase una vez..." text centered on top of curtain
+  &__intro {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 5; // above images + overlay, within curtain
+    pointer-events: none;
+    will-change: transform, opacity;
+    text-align: center;
+    padding: 2rem;
+  }
+
+  &__intro-text {
+    font-family: 'SofiaTitle', 'Cinzel Decorative', serif;
+    font-size: clamp(3rem, 10vw, 7rem);
+    line-height: 1.15;
+    color: $gold-shimmer;
+    text-shadow:
+      0 0 40px rgba(212, 200, 150, 0.3),
+      0 0 80px rgba(143, 212, 176, 0.1);
+    letter-spacing: 0.02em;
+  }
+}
+
+// ─── Hero Section ────────────────────────────────────────
+.hero-section {
+  position: relative;
+  min-height: 150vh; // enough space for curtain open + content reveal
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background:
+    radial-gradient(ellipse 80% 60% at 50% 40%, $mint-mid, transparent),
+    $mint-deep;
+}
+
+.hero-gradient-overlay {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse at 30% 20%, rgba(143, 212, 176, 0.12) 0%, transparent 50%),
+    radial-gradient(ellipse at 70% 80%, rgba(212, 200, 150, 0.08) 0%, transparent 50%);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.hero-glow {
+  position: absolute;
+  width: 500px;
+  height: 500px;
+  border-radius: 50%;
+  filter: blur(120px);
+  pointer-events: none;
+  z-index: 1;
+
+  &--left {
+    top: 20%;
+    left: -10%;
+    background: radial-gradient(circle, rgba(143, 212, 176, 0.15), transparent 70%);
+  }
+
+  &--right {
+    bottom: 20%;
+    right: -10%;
+    background: radial-gradient(circle, rgba(212, 200, 150, 0.12), transparent 70%);
+  }
+}
+
+// (hero-intro moved into .flower-curtain__intro)
+
+.hero-content {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 30;
+  will-change: transform, opacity;
+
+  &__inner {
+    text-align: center;
+    max-width: 700px;
+    padding: 2rem;
+  }
+}
+
+.hero-cta {
+  display: inline-block;
+  padding: 0.875rem 2.5rem;
+  border-radius: 9999px;
+  font-family: var(--font-playfair);
+  font-weight: 700;
+  font-size: 0.85rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  text-decoration: none;
+  transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+
+  &--primary {
+    background: $gold-shimmer;
+    color: $mint-deep;
+    box-shadow: 0 0 30px rgba(212, 200, 150, 0.3);
+
+    &:hover {
+      background: $gold-light;
+      box-shadow: 0 0 40px rgba(212, 200, 150, 0.5);
+      transform: translateY(-2px);
+    }
+  }
+
+  &--secondary {
+    background: transparent;
+    color: $cream-text;
+    border: 1px solid rgba($mint-light, 0.3);
+    backdrop-filter: blur(8px);
+
+    &:hover {
+      border-color: $mint-light;
+      color: $mint-light;
+      transform: translateY(-2px);
+    }
+  }
+}
+
+// ─── Section styling ─────────────────────────────────────
+section {
+  position: relative;
+  z-index: 10;
+}
+
+// ─── Shimmer / sparkle effect (matching sequins) ─────────
+.shimmer-text {
+  background: linear-gradient(
+    105deg,
+    $cream-text 0%,
+    $mint-glow 25%,
+    $gold-shimmer 50%,
+    $mint-glow 75%,
+    $cream-text 100%
+  );
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: shimmer 4s linear infinite;
+}
+
+@keyframes shimmer {
+  0% { background-position: 200% center; }
+  100% { background-position: -200% center; }
+}
+
+// ─── Utilities ───────────────────────────────────────────
 .glow-accent {
-  box-shadow: 0 0 20px oklch(0.75 0.12 85 / 0.3);
+  box-shadow: 0 0 24px rgba(212, 200, 150, 0.3);
 }
 
 .bg-gradient-radial {
   background: radial-gradient(circle, var(--tw-gradient-stops));
 }
 
-.scroll-smooth {
-  scroll-behavior: smooth;
+// ─── Footer ──────────────────────────────────────────────
+.site-footer {
+  position: relative;
+  z-index: 10;
+  padding: 3rem 0;
+  border-top: 1px solid rgba($mint-light, 0.15);
+  background: $mint-deep;
 }
 
 // ─── Animations ──────────────────────────────────────────
@@ -47,12 +291,8 @@ h2,
 }
 
 @keyframes float {
-  0%, 100% {
-    transform: translateY(0px);
-  }
-  50% {
-    transform: translateY(-10px);
-  }
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
 }
 
 .animate-fade-in {
@@ -60,12 +300,12 @@ h2,
 }
 
 @keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+// ─── GSAP reveal utility class ───────────────────────────
+.gsap-reveal {
+  opacity: 0;
+  transform: translateY(60px);
 }
