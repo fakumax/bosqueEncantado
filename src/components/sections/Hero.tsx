@@ -8,8 +8,7 @@ gsap.registerPlugin(ScrollTrigger)
 ScrollTrigger.config({ ignoreMobileResize: true })
 ScrollTrigger.normalizeScroll(true)
 
-const curtainImage =
-  'https://images.unsplash.com/photo-1487530811176-3780de880c2d?w=1920&h=1080&fit=crop&crop=center'
+const curtainVideo = '/videos/forestStart.mp4'
 
 export function Hero() {
   const wrapperRef = useRef<HTMLDivElement>(null)
@@ -19,15 +18,48 @@ export function Hero() {
   const introRef = useRef<HTMLDivElement>(null)
   const messageRef = useRef<HTMLDivElement>(null)
   const contentRef = useRef<HTMLDivElement>(null)
+  const videoLeftRef = useRef<HTMLVideoElement>(null)
+  const videoRightRef = useRef<HTMLVideoElement>(null)
   
   // Refs para las imágenes de 'Érase una vez'
   const img1Ref = useRef<HTMLImageElement>(null)
   const img2Ref = useRef<HTMLImageElement>(null)
   const img3Ref = useRef<HTMLImageElement>(null)
 
+  // Sincronizar ambos videos para que se vean como uno solo
   useEffect(() => {
-    const ctx = gsap.context(() => {
-      // ── Animación Inicial de las imágenes ──
+    const left = videoLeftRef.current
+    const right = videoRightRef.current
+    if (!left || !right) return
+
+    // En móviles, sincronizar con exactitud mediante 'currentTime' causa que el video
+    // entre en un bucle infinito de "cargando" y se congele. 
+    // La mejor solución es obligarlos a arrancar al mismo tiempo y dejarlos sueltos.
+    const playVideos = async () => {
+      try {
+        await Promise.all([
+          left.play().catch(() => {}),
+          right.play().catch(() => {})
+        ])
+      } catch (e) {
+        // Ignorar errores de autoplay
+      }
+    }
+    
+    // Ejecutar con un pequeñísimo delay para asegurar que el navegador los registró
+    setTimeout(playVideos, 50)
+
+    left.addEventListener('play', playVideos)
+    left.addEventListener('pause', () => right.pause())
+
+    return () => {
+      left.removeEventListener('play', playVideos)
+      left.removeEventListener('pause', () => right.pause())
+    }
+  }, [])
+
+  useEffect(() => {
+    let ctx = gsap.context(() => {
       const tlIntro = gsap.timeline({ defaults: { ease: 'power2.inOut' } })
       
       // Estado inicial (oculto por las dudas aunque empiece en opacity 0 en CSS/JSX)
@@ -36,10 +68,10 @@ export function Hero() {
       tlIntro
         // 1. Aparece el texto lentamente
         .to(img1Ref.current, { opacity: 1, duration: 2 })
-        // 2. Aparecen las figuras con un pequeño zoom/destello (usando filter brightness/blur en el from)
-        .fromTo(img2Ref.current, 
-          { opacity: 0, scale: 0.9, filter: 'brightness(2) blur(10px)' }, 
-          { opacity: 1, scale: 1, filter: 'brightness(1) blur(0px)', duration: 1.5, ease: 'power2.out' }, 
+        // 2. Aparecen las figuras con un efecto de "barrido" (como chispas dibujándolas) usando clipPath
+        .fromTo(img2Ref.current,
+          { opacity: 1, clipPath: 'inset(0% 100% 0% 0%)', filter: 'brightness(2) drop-shadow(0 0 10px rgba(255,215,0,0.8))' },
+          { clipPath: 'inset(0% 0% 0% 0%)', filter: 'brightness(1) drop-shadow(0 0 0px rgba(255,215,0,0))', duration: 2, ease: 'power2.inOut' },
           '-=0.5' // Empieza 0.5s antes de que termine el primer fade-in
         )
         // 3. Transición a la imagen completa por encima (sin desaparecer las de abajo para que no parpadee)
@@ -121,16 +153,18 @@ export function Hero() {
         {/* Background */}
         <div className="intro-viewport__bg" />
 
-        {/* Curtain */}
-        <div ref={curtainLeftRef} className="intro-curtain intro-curtain--left">
-          <div className="intro-curtain__img" style={{ backgroundImage: `url(${curtainImage})` }} />
+        {/* Curtain left - shows left half of video */}
+        <div ref={curtainLeftRef} className="intro-curtain intro-curtain--left bg-black">
+          <video ref={videoLeftRef} src={curtainVideo} autoPlay muted loop playsInline className="intro-curtain__vid" />
         </div>
-        <div ref={curtainRightRef} className="intro-curtain intro-curtain--right">
-          <div className="intro-curtain__img" style={{ backgroundImage: `url(${curtainImage})` }} />
+
+        {/* Curtain right - shows right half of video */}
+        <div ref={curtainRightRef} className="intro-curtain intro-curtain--right bg-black">
+          <video ref={videoRightRef} src={curtainVideo} autoPlay muted loop playsInline className="intro-curtain__vid intro-curtain__vid--right" />
         </div>
 
         {/* Érase una vez... */}
-        <div ref={introRef} className="intro-text flex items-center justify-center relative w-full h-full">
+        <div ref={introRef} className="intro-text intro-text--artwork-shadow flex items-center justify-center relative w-full h-full">
           <img 
             ref={img1Ref} 
             src="/img/erase1.webp" 
@@ -147,7 +181,7 @@ export function Hero() {
             ref={img3Ref} 
             src="/img/erase3.webp" 
             alt="Érase una vez completo" 
-            className="absolute shrink-0 w-[80%] max-w-[600px] object-contain opacity-0 z-10 drop-shadow-lg" 
+            className="absolute shrink-0 w-[80%] max-w-[600px] object-contain opacity-0 z-10" 
           />
         </div>
 
