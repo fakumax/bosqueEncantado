@@ -1,6 +1,7 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { List, X } from '@phosphor-icons/react'
 import { Button } from '@/components/ui/button'
+import gsap from 'gsap'
 
 interface NavigationProps {
   isMenuOpen: boolean
@@ -9,6 +10,7 @@ interface NavigationProps {
 
 export function Navigation({ isMenuOpen, setIsMenuOpen }: NavigationProps) {
   const [isScrolled, setIsScrolled] = useState(false)
+  const navRef = useRef<HTMLElement>(null)
 
   const navItems = [
     { label: 'Inicio', href: '#inicio' },
@@ -22,6 +24,11 @@ export function Navigation({ isMenuOpen, setIsMenuOpen }: NavigationProps) {
   ]
 
   useEffect(() => {
+    // Hide nav initially — FloatingFlowers will reveal it via GSAP
+    if (navRef.current) {
+      gsap.set(navRef.current, { autoAlpha: 0, y: -20 })
+    }
+
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 50)
     }
@@ -39,6 +46,8 @@ export function Navigation({ isMenuOpen, setIsMenuOpen }: NavigationProps) {
   return (
     <>
       <nav
+        ref={navRef}
+        id="main-nav"
         className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
           isScrolled ? 'bg-[#091a12]/95 backdrop-blur-lg shadow-lg shadow-black/20' : 'bg-transparent'
         }`}

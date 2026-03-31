@@ -26,9 +26,9 @@ export function Location() {
     }, sectionRef)
     return () => ctx.revert()
   }, [])
-  const venueName = 'Salón de Eventos Jardín Mágico'
-  const address = 'Av. Principal 1234, Ciudad de Buenos Aires'
-  const mapsUrl = 'https://maps.google.com/?q=-34.6037,-58.3816'
+  const venueName = 'Espacio Recreativo IPLyC'
+  const address = 'Av. Jauretche esq. Av. Tambor de Tacuarí, Posadas, Misiones'
+  const mapsUrl = 'https://www.google.com/maps/place/Espacio+Recreativo+IPLyC/@-27.3663442,-55.9393798,17z/data=!3m1!4b1!4m6!3m5!1s0x9457bdfef28b1ac5:0x3ac4b81af4a2672!8m2!3d-27.3663442!4d-55.9393798!16s%2Fg%2F11d_7sw5f4'
 
   return (
     <section ref={sectionRef} id="ubicacion" className="py-20 px-4">
@@ -81,7 +81,7 @@ export function Location() {
 
           <Card className="p-2 bg-card/90 backdrop-blur overflow-hidden h-[400px]">
             <iframe
-              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3284.0168881960983!2d-58.383659!3d-34.603722!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMzTCsDM2JzEzLjQiUyA1OMKwMjMnMDEuMiJX!5e0!3m2!1sen!2sar!4v1234567890"
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1772.3!2d-55.9393798!3d-27.3663442!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x9457bdfef28b1ac5%3A0x3ac4b81af4a2672!2sEspacio%20Recreativo%20IPLyC!5e0!3m2!1ses!2sar!4v1711800000000"
               width="100%"
               height="100%"
               style={{ border: 0 }}

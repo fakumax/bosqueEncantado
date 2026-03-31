@@ -19,7 +19,7 @@ export function Countdown() {
 
   useEffect(() => {
     const calculateTimeLeft = () => {
-      const eventDate = new Date('2026-06-06T00:00:00-03:00')
+      const eventDate = new Date('2026-06-06T21:00:00-03:00')
       const now = new Date()
       const difference = eventDate.getTime() - now.getTime()
 

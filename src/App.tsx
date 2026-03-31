@@ -10,7 +10,6 @@ import { MusicPlaylist } from '@/components/sections/MusicPlaylist'
 import { Navigation } from '@/components/Navigation'
 import { Toaster } from '@/components/ui/sonner'
 import { Butterflies } from '@/components/effects/Butterflies'
-import { FloatingFlowers } from '@/components/effects/FloatingFlowers'
 import { MagicParticles } from '@/components/effects/MagicParticles'
 import Lenis from 'lenis'
 import gsap from 'gsap'
@@ -24,7 +23,7 @@ function App() {
   useEffect(() => {
     // Lenis smooth scroll
     const lenis = new Lenis({
-      duration: 1.2,
+      duration: 1.0,
       easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
       smoothWheel: true,
     })
@@ -48,7 +47,6 @@ function App() {
       <Toaster position="top-center" />
       <MagicParticles />
       <Butterflies />
-      <FloatingFlowers />
       <Navigation isMenuOpen={isMenuOpen} setIsMenuOpen={setIsMenuOpen} />
 
       <main>

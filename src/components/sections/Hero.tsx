@@ -6,105 +6,171 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger'
 
 gsap.registerPlugin(ScrollTrigger)
 
+const curtainImage =
+  'https://images.unsplash.com/photo-1487530811176-3780de880c2d?w=1920&h=1080&fit=crop&crop=center'
+
 export function Hero() {
-  const sectionRef = useRef<HTMLElement>(null)
+  const wrapperRef = useRef<HTMLDivElement>(null)
+  const viewportRef = useRef<HTMLDivElement>(null)
+  const curtainLeftRef = useRef<HTMLDivElement>(null)
+  const curtainRightRef = useRef<HTMLDivElement>(null)
+  const introRef = useRef<HTMLDivElement>(null)
+  const messageRef = useRef<HTMLDivElement>(null)
   const contentRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      // Sofía content reveals as the curtain finishes opening
-      gsap.fromTo(
-        contentRef.current,
-        { opacity: 0, scale: 0.9, y: 40 },
-        {
-          opacity: 1,
-          scale: 1,
-          y: 0,
-          ease: 'power3.out',
-          scrollTrigger: {
-            trigger: sectionRef.current,
-            start: '+=400',   // starts revealing after curtain begins opening
-            end: '+=500',     // fully visible 500px later
-            scrub: 1,
-          },
-        }
-      )
-
-      // Parallax gradient overlay
-      gsap.to('.hero-gradient-overlay', {
-        yPercent: -30,
-        ease: 'none',
+      // Pin the viewport for the entire intro sequence
+      const tl = gsap.timeline({
         scrollTrigger: {
-          trigger: sectionRef.current,
+          trigger: wrapperRef.current,
           start: 'top top',
-          end: 'bottom top',
-          scrub: true,
+          end: '+=2500',
+          pin: viewportRef.current,
+          scrub: 0.6,
+          onLeave: () => {
+            gsap.to('#main-nav', { autoAlpha: 1, y: 0, duration: 0.4, ease: 'power2.out' })
+          },
+          onEnterBack: () => {
+            gsap.to('#main-nav', { autoAlpha: 0, y: -20, duration: 0.3 })
+          },
         },
       })
-    }, sectionRef)
+
+      // ── Phase 1: "Érase una vez..." fades out ──
+      tl.to(introRef.current, {
+        opacity: 0,
+        scale: 1.05,
+        duration: 0.08,
+        ease: 'power2.in',
+      }, 0.02)
+
+      // ── Phase 2: Curtain opens ──
+      tl.to(curtainLeftRef.current, {
+        xPercent: -100,
+        duration: 0.18,
+        ease: 'power2.inOut',
+      }, 0.06)
+      tl.to(curtainRightRef.current, {
+        xPercent: 100,
+        duration: 0.18,
+        ease: 'power2.inOut',
+      }, 0.06)
+
+      // ── Phase 3: Princess message appears ──
+      tl.fromTo(messageRef.current, {
+        opacity: 0, y: 30,
+      }, {
+        opacity: 1, y: 0,
+        duration: 0.1,
+        ease: 'power2.out',
+      }, 0.2)
+
+      // ── Phase 4: Princess message fades out ──
+      tl.to(messageRef.current, {
+        opacity: 0, y: -30,
+        duration: 0.1,
+        ease: 'power2.in',
+      }, 0.42)
+
+      // ── Phase 5: Sofía content appears + spark video ──
+      tl.fromTo(contentRef.current, {
+        opacity: 0, y: 40, scale: 0.95,
+      }, {
+        opacity: 1, y: 0, scale: 1,
+        duration: 0.12,
+        ease: 'power3.out',
+        onStart: () => {
+          gsap.to('#spark-overlay', { autoAlpha: 1, duration: 0.8 })
+        },
+      }, 0.5)
+
+      // ── Phase 6: Hold Sofía visible (0.62 → 0.85 = idle) ──
+
+      // ── Phase 7: Sofía fades out before unpin ──
+      tl.to(contentRef.current, {
+        opacity: 0, y: -40,
+        duration: 0.12,
+        ease: 'power2.in',
+        onComplete: () => {
+          gsap.to('#spark-overlay', { autoAlpha: 0, duration: 0.5 })
+        },
+      }, 0.88)
+    }, wrapperRef)
 
     return () => ctx.revert()
   }, [])
 
   return (
-    <section
-      ref={sectionRef}
-      id="inicio"
-      className="hero-section"
-    >
-      {/* Deep forest gradient overlay */}
-      <div className="hero-gradient-overlay" />
+    <div ref={wrapperRef} id="inicio">
+      {/* This is pinned — everything happens inside one viewport */}
+      <div ref={viewportRef} className="intro-viewport">
+        {/* Background */}
+        <div className="intro-viewport__bg" />
 
-      {/* Ambient glow spots */}
-      <div className="hero-glow hero-glow--left" />
-      <div className="hero-glow hero-glow--right" />
+        {/* Curtain */}
+        <div ref={curtainLeftRef} className="intro-curtain intro-curtain--left">
+          <div className="intro-curtain__img" style={{ backgroundImage: `url(${curtainImage})` }} />
+        </div>
+        <div ref={curtainRightRef} className="intro-curtain intro-curtain--right">
+          <div className="intro-curtain__img" style={{ backgroundImage: `url(${curtainImage})` }} />
+        </div>
 
-      {/* ═══ CONTENT — revealed after curtain opens ═══ */}
-      <div ref={contentRef} className="hero-content">
-        <div className="hero-content__inner">
-          <div className="flex items-center justify-center gap-3 mb-6">
-            <Sparkle size={28} weight="fill" className="text-accent animate-float" />
-            <Heart size={20} weight="fill" className="text-primary/60" />
-            <Sparkle size={28} weight="fill" className="text-accent animate-float" />
-          </div>
+        {/* Érase una vez... */}
+        <div ref={introRef} className="intro-text">
+          <p className="intro-text__title">Érase<br />una vez...</p>
+        </div>
 
-          <div className="mb-4">
-            <SparkleText text="Sofía" />
-          </div>
+        {/* Princess message */}
+        <div ref={messageRef} className="intro-message">
+          <Sparkle size={32} weight="fill" className="intro-message__sparkle" />
+          <p className="intro-message__line">En un reino de sueños y estrellas</p>
+          <p className="intro-message__line">una princesa está por celebrar</p>
+          <p className="intro-message__line intro-message__line--gold">
+            el capítulo más hermoso de su historia...
+          </p>
+          <Sparkle size={32} weight="fill" className="intro-message__sparkle" />
+        </div>
 
-          <div className="space-y-2 mb-8">
-            <p className="text-xl md:text-2xl text-foreground/80 font-medium">
-              Celebra conmigo mis XV años
-            </p>
-            <p className="text-lg md:text-xl text-muted-foreground italic">
-              Un momento mágico para recordar
-            </p>
-          </div>
+        {/* Sofía content */}
+        <div ref={contentRef} className="intro-hero">
+          <div className="intro-hero__inner">
+            <div className="flex items-center justify-center gap-3 mb-6">
+              <Sparkle size={28} weight="fill" className="text-accent animate-float" />
+              <Heart size={20} weight="fill" className="text-primary/60" />
+              <Sparkle size={28} weight="fill" className="text-accent animate-float" />
+            </div>
 
-          <div className="inline-block bg-accent/15 border border-accent/40 rounded-full px-8 py-3 backdrop-blur-sm">
-            <p className="text-accent font-semibold text-lg tracking-wide">
-              6 de Junio, 2026
-            </p>
-          </div>
+            <div className="mb-4">
+              <SparkleText text="Sofía" />
+            </div>
 
-          <div className="mt-12 flex flex-wrap justify-center gap-4">
-            <a
-              href="#rsvp"
-              className="hero-cta hero-cta--primary"
-            >
-              Confirmar Asistencia
-            </a>
-            <a
-              href="#detalles"
-              className="hero-cta hero-cta--secondary"
-            >
-              Ver Detalles
-            </a>
+            <div className="space-y-2 mb-8">
+              <p className="text-xl md:text-2xl text-foreground/80 font-medium">
+                Celebra conmigo mis XV años
+              </p>
+              <p className="text-lg md:text-xl text-muted-foreground italic">
+                Un momento mágico para recordar
+              </p>
+            </div>
+
+            <div className="inline-block bg-accent/15 border border-accent/40 rounded-full px-8 py-3 backdrop-blur-sm">
+              <p className="text-accent font-semibold text-lg tracking-wide">
+                6 de Junio, 2026
+              </p>
+            </div>
+
+            <div className="mt-10 flex flex-wrap justify-center gap-4">
+              <a href="#rsvp" className="hero-cta hero-cta--primary">
+                Confirmar Asistencia
+              </a>
+              <a href="#detalles" className="hero-cta hero-cta--secondary">
+                Ver Detalles
+              </a>
+            </div>
           </div>
         </div>
       </div>
-
-      <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-[#091a12] to-transparent z-10" />
-    </section>
+    </div>
   )
 }

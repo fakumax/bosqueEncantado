@@ -34,7 +34,7 @@ export function EventDetails() {
     {
       icon: Clock,
       title: 'Hora',
-      value: '20:00 hs (UTC-3)',
+      value: '21:00 hs',
     },
     {
       icon: Dress,
