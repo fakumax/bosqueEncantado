@@ -23,9 +23,11 @@ function App() {
   useEffect(() => {
     // Lenis smooth scroll
     const lenis = new Lenis({
-      duration: 1.0,
+      duration: 0.8,
       easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
       smoothWheel: true,
+      wheelMultiplier: 1.8,
+      touchMultiplier: 2.5,
     })
 
     // Connect Lenis to GSAP ScrollTrigger
@@ -60,10 +62,19 @@ function App() {
         <MusicPlaylist />
       </main>
 
-      <footer className="site-footer">
+      <footer className="site-footer pb-8 pt-4">
         <div className="container mx-auto px-4 text-center">
-          <p className="text-[#7aaa90] text-sm tracking-widest uppercase font-playfair">
-            Celebrando momentos mágicos • Sofía 2026
+          <p className="text-[#7aaa90] text-sm tracking-widest font-playfair flex items-center justify-center gap-1.5 flex-wrap">
+            Hecho con <span className="text-red-500">❤️</span> por{' '}
+            <a 
+              href="https://github.com/fakumax/" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="text-accent hover:text-white transition-colors"
+            >
+              Facundo Vergara
+            </a>{' '}
+            © {new Date().getFullYear()}
           </p>
         </div>
       </footer>

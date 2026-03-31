@@ -25,9 +25,9 @@ export function Hero() {
         scrollTrigger: {
           trigger: wrapperRef.current,
           start: 'top top',
-          end: '+=2500',
+          end: '+=1500',
           pin: viewportRef.current,
-          scrub: 0.6,
+          scrub: 0.3,
           onLeave: () => {
             gsap.to('#main-nav', { autoAlpha: 1, y: 0, duration: 0.4, ease: 'power2.out' })
           },
@@ -73,28 +73,22 @@ export function Hero() {
         ease: 'power2.in',
       }, 0.42)
 
-      // ── Phase 5: Sofía content appears + spark video ──
+      // ── Phase 5: Sofía content appears ──
       tl.fromTo(contentRef.current, {
         opacity: 0, y: 40, scale: 0.95,
       }, {
         opacity: 1, y: 0, scale: 1,
         duration: 0.12,
         ease: 'power3.out',
-        onStart: () => {
-          gsap.to('#spark-overlay', { autoAlpha: 1, duration: 0.8 })
-        },
       }, 0.5)
 
       // ── Phase 6: Hold Sofía visible (0.62 → 0.85 = idle) ──
 
-      // ── Phase 7: Sofía fades out before unpin ──
+      // ── Phase 7: Sofía fades out before unpin (spark stays visible) ──
       tl.to(contentRef.current, {
         opacity: 0, y: -40,
         duration: 0.12,
         ease: 'power2.in',
-        onComplete: () => {
-          gsap.to('#spark-overlay', { autoAlpha: 0, duration: 0.5 })
-        },
       }, 0.88)
     }, wrapperRef)
 
