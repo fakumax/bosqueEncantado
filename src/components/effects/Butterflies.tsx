@@ -1,77 +1,88 @@
 import { useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
 
-interface Butterfly {
+const PARTICLE_COUNT = 30
+
+const COLORS = [
+  '#FFD700',  // gold
+  '#FFEC80',  // soft yellow
+  '#A7F3D0',  // mint green
+  '#93C5FD',  // soft blue
+  '#C4B5FD',  // lavender
+  '#FCA5A5',  // soft pink
+  '#FFFFFF',  // white
+  '#FDE68A',  // warm yellow
+]
+
+interface Spark {
   id: number
   x: number
   y: number
-  delay: number
-  duration: number
   size: number
+  color: string
+  blur: number
+  glowSize: number
+  delay: number
+  wanderDuration: number
+  pulseDuration: number
+  dx: number[]
+  dy: number[]
 }
 
 export function Butterflies() {
-  const [butterflies, setButterflies] = useState<Butterfly[]>([])
+  const [sparks, setSparks] = useState<Spark[]>([])
 
   useEffect(() => {
-    const newButterflies: Butterfly[] = Array.from({ length: 8 }, (_, i) => ({
-      id: i,
-      x: Math.random() * 100,
-      y: Math.random() * 100,
-      delay: Math.random() * 2,
-      duration: 8 + Math.random() * 4,
-      size: 12 + Math.random() * 8
-    }))
-    setButterflies(newButterflies)
+    const newSparks: Spark[] = Array.from({ length: PARTICLE_COUNT }, (_, i) => {
+      const size = 2 + Math.random() * 5
+      return {
+        id: i,
+        x: Math.random() * 100,
+        y: Math.random() * 100,
+        size,
+        color: COLORS[Math.floor(Math.random() * COLORS.length)],
+        blur: 0.3 + Math.random() * 0.8,
+        glowSize: size * (1.5 + Math.random() * 2),
+        delay: Math.random() * 4,
+        wanderDuration: 8 + Math.random() * 10,
+        pulseDuration: 1.5 + Math.random() * 3,
+        // random waypoints as % offsets for smooth wander
+        dx: Array.from({ length: 6 }, () => (Math.random() - 0.5) * 120),
+        dy: Array.from({ length: 6 }, () => (Math.random() - 0.5) * 120),
+      }
+    })
+    setSparks(newSparks)
   }, [])
 
   return (
     <div className="fixed inset-0 pointer-events-none z-50 overflow-hidden">
-      {butterflies.map((butterfly) => (
+      {sparks.map((s) => (
         <motion.div
-          key={butterfly.id}
-          className="absolute"
+          key={s.id}
           style={{
-            left: `${butterfly.x}%`,
-            top: `${butterfly.y}%`,
+            position: 'absolute',
+            left: `${s.x}%`,
+            top: `${s.y}%`,
+            width: s.size,
+            height: s.size,
+            borderRadius: '50%',
+            backgroundColor: s.color,
+            boxShadow: `0 0 ${s.glowSize}px ${s.glowSize * 0.5}px ${s.color}, 0 0 ${s.glowSize * 2.5}px ${s.glowSize}px ${s.color}40`,
+            filter: `blur(${s.blur}px)`,
           }}
           animate={{
-            x: [0, 50, -30, 60, -20, 0],
-            y: [0, -60, -30, -80, -40, 0],
-            rotate: [0, 15, -15, 20, -10, 0],
+            x: [...s.dx, 0],
+            y: [...s.dy, 0],
+            opacity: [0.3, 0.9, 0.2, 0.8, 0.4, 0.7, 0.3],
+            scale: [1, 1.5, 0.6, 1.3, 0.8, 1.4, 1],
           }}
           transition={{
-            duration: butterfly.duration,
+            duration: s.wanderDuration,
             repeat: Infinity,
-            delay: butterfly.delay,
-            ease: "easeInOut",
+            delay: s.delay,
+            ease: 'easeInOut',
           }}
-        >
-          <motion.svg
-            width={butterfly.size}
-            height={butterfly.size}
-            viewBox="0 0 24 24"
-            fill="none"
-            animate={{
-              scale: [1, 1.2, 0.9, 1.1, 1],
-            }}
-            transition={{
-              duration: 0.5,
-              repeat: Infinity,
-              ease: "easeInOut",
-            }}
-          >
-            <path
-              d="M12 3C12 3 10 5 10 8C10 11 12 12 12 12C12 12 14 11 14 8C14 5 12 3 12 3Z"
-              fill="oklch(0.75 0.12 85)"
-              opacity="0.6"
-            />
-            <ellipse cx="8" cy="10" rx="3.5" ry="5" fill="oklch(0.70 0.10 145)" opacity="0.7" />
-            <ellipse cx="16" cy="10" rx="3.5" ry="5" fill="oklch(0.70 0.10 145)" opacity="0.7" />
-            <ellipse cx="7" cy="16" rx="3" ry="4.5" fill="oklch(0.65 0.08 155)" opacity="0.6" />
-            <ellipse cx="17" cy="16" rx="3" ry="4.5" fill="oklch(0.65 0.08 155)" opacity="0.6" />
-          </motion.svg>
-        </motion.div>
+        />
       ))}
     </div>
   )

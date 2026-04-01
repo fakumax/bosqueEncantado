@@ -3,6 +3,7 @@ import { Heart, Sparkle } from '@phosphor-icons/react'
 import { SparkleText } from '@/components/effects/SparkleText'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import * as THREE from 'three'
 
 gsap.registerPlugin(ScrollTrigger)
 ScrollTrigger.config({ ignoreMobileResize: true })
@@ -10,55 +11,226 @@ ScrollTrigger.normalizeScroll(true)
 
 const curtainVideo = '/videos/forestStart.mp4'
 
+const videoVertexShader = `
+varying vec2 vUv;
+varying float vFold;
+uniform float uProgress;
+
+const float PI = 3.141592653589793;
+
+void main() {
+  vUv = uv;
+  vec3 transformed = position;
+  float progress = clamp(uProgress, 0.0, 1.0);
+  float edge = smoothstep(0.0, 1.0, uv.x);
+  float curve = sin(edge * PI) * pow(progress, 1.12);
+  float freeEdgeLift = smoothstep(0.58, 1.0, edge) * progress;
+
+  transformed.z += curve * 0.18 + freeEdgeLift * 0.06;
+  transformed.x -= curve * 0.08 + freeEdgeLift * 0.035;
+  transformed.y += sin(edge * PI) * progress * 0.018;
+
+  vFold = curve + freeEdgeLift * 0.5;
+
+  gl_Position = projectionMatrix * modelViewMatrix * vec4(transformed, 1.0);
+}
+`
+
+const videoFragmentShader = `
+varying vec2 vUv;
+varying float vFold;
+uniform sampler2D uTexture;
+uniform float uProgress;
+uniform vec2 uUvScale;
+uniform vec2 uUvOffset;
+
+void main() {
+  vec2 coverUv = vUv * uUvScale + uUvOffset;
+  coverUv = clamp(coverUv, vec2(0.001), vec2(0.999));
+
+  vec4 texel = texture2D(uTexture, coverUv);
+
+  float spineLight = (1.0 - smoothstep(0.0, 0.16, vUv.x)) * 0.10;
+  float pageShade = 1.0 - clamp(abs(vFold) * 0.28, 0.0, 0.2);
+  float freeEdgeGlow = smoothstep(0.74, 1.0, vUv.x) * 0.12 * uProgress;
+
+  texel.rgb = texel.rgb * pageShade + spineLight + freeEdgeGlow;
+
+  gl_FragColor = texel;
+}
+`
+
 export function Hero() {
   const wrapperRef = useRef<HTMLDivElement>(null)
   const viewportRef = useRef<HTMLDivElement>(null)
-  const curtainLeftRef = useRef<HTMLDivElement>(null)
-  const curtainRightRef = useRef<HTMLDivElement>(null)
+  const coverRef = useRef<HTMLDivElement>(null)
+  const coverCanvasRef = useRef<HTMLCanvasElement>(null)
+  const coverVideoRef = useRef<HTMLVideoElement>(null)
   const introRef = useRef<HTMLDivElement>(null)
   const messageRef = useRef<HTMLDivElement>(null)
   const contentRef = useRef<HTMLDivElement>(null)
-  const videoLeftRef = useRef<HTMLVideoElement>(null)
-  const videoRightRef = useRef<HTMLVideoElement>(null)
   
   // Refs para las imágenes de 'Érase una vez'
   const img1Ref = useRef<HTMLImageElement>(null)
   const img2Ref = useRef<HTMLImageElement>(null)
   const img3Ref = useRef<HTMLImageElement>(null)
 
-  // Sincronizar ambos videos para que se vean como uno solo
   useEffect(() => {
-    const left = videoLeftRef.current
-    const right = videoRightRef.current
-    if (!left || !right) return
+    const coverElement = coverRef.current
+    const canvasElement = coverCanvasRef.current
+    const videoElement = coverVideoRef.current
 
-    // En móviles, sincronizar con exactitud mediante 'currentTime' causa que el video
-    // entre en un bucle infinito de "cargando" y se congele. 
-    // La mejor solución es obligarlos a arrancar al mismo tiempo y dejarlos sueltos.
-    const playVideos = async () => {
-      try {
-        await Promise.all([
-          left.play().catch(() => {}),
-          right.play().catch(() => {})
-        ])
-      } catch (e) {
-        // Ignorar errores de autoplay
+    if (!coverElement || !canvasElement || !videoElement) return
+
+    const pageState = { progress: 0 }
+    let renderer: THREE.WebGLRenderer | null = null
+    let scene: THREE.Scene | null = null
+    let camera: THREE.PerspectiveCamera | null = null
+    let geometry: THREE.PlaneGeometry | null = null
+    let material: THREE.ShaderMaterial | null = null
+    let mesh: THREE.Mesh<THREE.PlaneGeometry, THREE.ShaderMaterial> | null = null
+    let videoTexture: THREE.VideoTexture | null = null
+    let resizeObserver: ResizeObserver | null = null
+
+    const syncPageState = () => {
+      const progress = THREE.MathUtils.clamp(pageState.progress, 0, 1)
+
+      coverElement.style.setProperty('--page-shadow-opacity', `${0.18 + progress * 0.42}`)
+      coverElement.style.setProperty('--page-edge-opacity', `${0.56 - progress * 0.28}`)
+      coverElement.style.setProperty('--page-highlight-shift', `${progress * 18}%`)
+
+      if (!mesh || !material) return
+
+      mesh.rotation.y = -THREE.MathUtils.degToRad(74) * progress
+      mesh.rotation.x = THREE.MathUtils.degToRad(5.5) * progress
+      mesh.rotation.z = THREE.MathUtils.degToRad(-1.4) * progress
+      mesh.position.y = -0.015 * progress
+      material.uniforms.uProgress.value = progress
+    }
+
+    const resizeScene = () => {
+      if (!renderer || !camera || !mesh) return
+
+      const bounds = coverElement.getBoundingClientRect()
+
+      if (!bounds.width || !bounds.height) return
+
+      renderer.setSize(bounds.width, bounds.height, false)
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.75))
+
+      camera.aspect = bounds.width / bounds.height
+      camera.updateProjectionMatrix()
+
+      const viewHeight =
+        2 * Math.tan(THREE.MathUtils.degToRad(camera.fov / 2)) * camera.position.z
+      const viewWidth = viewHeight * camera.aspect
+
+      mesh.scale.set(viewWidth, viewHeight, 1)
+      mesh.position.x = -viewWidth / 2
+
+      if (material) {
+        const viewportAspect = bounds.width / bounds.height
+        const mediaAspect =
+          videoElement.videoWidth && videoElement.videoHeight
+            ? videoElement.videoWidth / videoElement.videoHeight
+            : 9 / 16
+
+        const uvScale = material.uniforms.uUvScale.value as THREE.Vector2
+        const uvOffset = material.uniforms.uUvOffset.value as THREE.Vector2
+
+        uvScale.set(1, 1)
+        uvOffset.set(0, 0)
+
+        if (mediaAspect > viewportAspect) {
+          uvScale.x = viewportAspect / mediaAspect
+          uvOffset.x = (1 - uvScale.x) / 2
+        } else {
+          uvScale.y = mediaAspect / viewportAspect
+          uvOffset.y = (1 - uvScale.y) / 2
+        }
       }
     }
-    
-    // Ejecutar con un pequeñísimo delay para asegurar que el navegador los registró
-    setTimeout(playVideos, 50)
 
-    left.addEventListener('play', playVideos)
-    left.addEventListener('pause', () => right.pause())
+    const startVideo = () => {
+      videoElement.muted = true
+      const playPromise = videoElement.play()
 
-    return () => {
-      left.removeEventListener('play', playVideos)
-      left.removeEventListener('pause', () => right.pause())
+      if (playPromise) {
+        playPromise.catch(() => {
+          coverElement.classList.add('intro-cover--fallback')
+        })
+      }
     }
-  }, [])
 
-  useEffect(() => {
+    coverElement.classList.remove('intro-cover--fallback')
+    coverElement.classList.remove('intro-cover--webgl-ready')
+
+    try {
+      renderer = new THREE.WebGLRenderer({
+        canvas: canvasElement,
+        alpha: true,
+        antialias: false,
+        powerPreference: 'high-performance',
+      })
+      renderer.outputColorSpace = THREE.SRGBColorSpace
+      renderer.setClearColor(0x000000, 0)
+
+      scene = new THREE.Scene()
+      camera = new THREE.PerspectiveCamera(32, 1, 0.1, 40)
+      camera.position.z = 5
+
+      geometry = new THREE.PlaneGeometry(1, 1, 96, 48)
+      geometry.translate(0.5, 0, 0)
+
+      videoTexture = new THREE.VideoTexture(videoElement)
+      videoTexture.colorSpace = THREE.SRGBColorSpace
+      videoTexture.minFilter = THREE.LinearFilter
+      videoTexture.magFilter = THREE.LinearFilter
+      videoTexture.generateMipmaps = false
+
+      material = new THREE.ShaderMaterial({
+        uniforms: {
+          uTexture: { value: videoTexture },
+          uProgress: { value: 0 },
+          uUvScale: { value: new THREE.Vector2(1, 1) },
+          uUvOffset: { value: new THREE.Vector2(0, 0) },
+        },
+        vertexShader: videoVertexShader,
+        fragmentShader: videoFragmentShader,
+        transparent: true,
+        side: THREE.DoubleSide,
+      })
+
+      mesh = new THREE.Mesh(geometry, material)
+      scene.add(mesh)
+
+      renderer.setAnimationLoop(() => {
+        if (renderer && scene && camera) {
+          renderer.render(scene, camera)
+        }
+      })
+
+      coverElement.classList.add('intro-cover--webgl-ready')
+      syncPageState()
+      resizeScene()
+
+      window.addEventListener('resize', resizeScene)
+      videoElement.addEventListener('loadedmetadata', resizeScene)
+
+      if (typeof ResizeObserver !== 'undefined') {
+        resizeObserver = new ResizeObserver(resizeScene)
+        resizeObserver.observe(coverElement)
+      }
+    } catch {
+      coverElement.classList.add('intro-cover--fallback')
+    }
+
+    if (videoElement.readyState >= 2) {
+      startVideo()
+    } else {
+      videoElement.addEventListener('canplay', startVideo, { once: true })
+    }
+
     let ctx = gsap.context(() => {
       const tlIntro = gsap.timeline({ defaults: { ease: 'power2.inOut' } })
       
@@ -104,17 +276,18 @@ export function Hero() {
         ease: 'power2.in',
       }, 0.02)
 
-      // ── Phase 2: Curtain opens ──
-      tl.to(curtainLeftRef.current, {
-        xPercent: -100,
+      // ── Phase 2: Cover opens like a storybook page ──
+      tl.to(pageState, {
+        progress: 1,
         duration: 0.18,
         ease: 'power2.inOut',
+        onUpdate: syncPageState,
       }, 0.06)
-      tl.to(curtainRightRef.current, {
-        xPercent: 100,
-        duration: 0.18,
-        ease: 'power2.inOut',
-      }, 0.06)
+      tl.to(coverElement, {
+        autoAlpha: 0,
+        duration: 0.04,
+        ease: 'power1.out',
+      }, 0.18)
 
       // ── Phase 3: Princess message appears ──
       tl.fromTo(messageRef.current, {
@@ -144,7 +317,23 @@ export function Hero() {
       // Sofía stays visible from 0.5 to 1.0 — no fade out
     }, wrapperRef)
 
-    return () => ctx.revert()
+    return () => {
+      ctx.revert()
+      videoElement.removeEventListener('canplay', startVideo)
+      videoElement.removeEventListener('loadedmetadata', resizeScene)
+      window.removeEventListener('resize', resizeScene)
+      resizeObserver?.disconnect()
+      renderer?.setAnimationLoop(null)
+      videoTexture?.dispose()
+      material?.dispose()
+      geometry?.dispose()
+      renderer?.dispose()
+      videoElement.pause()
+      coverElement.classList.remove('intro-cover--webgl-ready')
+      coverElement.style.removeProperty('--page-shadow-opacity')
+      coverElement.style.removeProperty('--page-edge-opacity')
+      coverElement.style.removeProperty('--page-highlight-shift')
+    }
   }, [])
 
   return (
@@ -153,14 +342,23 @@ export function Hero() {
         {/* Background */}
         <div className="intro-viewport__bg" />
 
-        {/* Curtain left - shows left half of video */}
-        <div ref={curtainLeftRef} className="intro-curtain intro-curtain--left bg-black">
-          <video ref={videoLeftRef} src={curtainVideo} autoPlay muted loop playsInline className="intro-curtain__vid" />
-        </div>
-
-        {/* Curtain right - shows right half of video */}
-        <div ref={curtainRightRef} className="intro-curtain intro-curtain--right bg-black">
-          <video ref={videoRightRef} src={curtainVideo} autoPlay muted loop playsInline className="intro-curtain__vid intro-curtain__vid--right" />
+        {/* Full video cover that opens like a page */}
+        <div ref={coverRef} className="intro-cover">
+          <canvas ref={coverCanvasRef} className="intro-cover__canvas" />
+          <video
+            ref={coverVideoRef}
+            src={curtainVideo}
+            autoPlay
+            muted
+            loop
+            playsInline
+            preload="auto"
+            aria-hidden="true"
+            disablePictureInPicture
+            className="intro-cover__video-source"
+          />
+          <div className="intro-cover__shadow" />
+          <div className="intro-cover__edge" />
         </div>
 
         {/* Érase una vez... */}
