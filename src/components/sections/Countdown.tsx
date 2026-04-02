@@ -109,15 +109,14 @@ export function Countdown() {
           />
         </div>
 
-        <Card className="mt-12 p-8 bg-primary/5 border-2 border-primary/20 max-w-4xl mx-auto">
+        <Card className="mt-6 px-4 py-4 bg-primary/5 border border-primary/20 mx-auto">
           <div className="text-center">
-            <h3 className="font-playfair text-2xl font-bold text-foreground mb-3">
+            <h3 className="font-playfair text-lg font-bold text-foreground mb-1">
               Una Celebración Especial
             </h3>
-            <p className="text-foreground/80 max-w-3xl mx-auto">
+            <p className="text-foreground/80 text-sm leading-snug">
               Únete a nosotros para celebrar la mayoría de edad de Sofía en una velada mágica 
-              inspirada en los bosques encantados. Será una noche para recordar, llena de 
-              sorpresas, alegría y momentos inolvidables junto a familia y amigos.
+              inspirada en los bosques encantados. Una noche llena de sorpresas, alegría y momentos inolvidables.
             </p>
           </div>
         </Card>

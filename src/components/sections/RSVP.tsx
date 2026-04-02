@@ -81,99 +81,88 @@ export function RSVP() {
   }
 
   return (
-    <section ref={sectionRef} id="rsvp" className="presentation-slide px-4">
-      <div className="container mx-auto max-w-2xl">
-        <div className="text-center mb-12">
-          <div className="inline-flex items-center justify-center mb-4">
-            <EnvelopeSimple size={40} weight="duotone" className="text-accent" />
+    <section ref={sectionRef} id="rsvp" className="presentation-slide px-4" style={{ justifyContent: 'center' }}>
+      <div className="container mx-auto max-w-md w-full">
+        <div className="text-center mb-4">
+          <div className="inline-flex items-center justify-center mb-2">
+            <EnvelopeSimple size={28} weight="duotone" className="text-accent" />
           </div>
-          <h2 className="font-playfair text-3xl md:text-5xl font-bold text-foreground mb-4">
+          <h2 className="font-playfair text-2xl md:text-3xl font-bold text-foreground mb-1">
             Confirma tu Asistencia
           </h2>
-          <p className="text-lg text-muted-foreground">
-            Por favor completa el formulario para confirmar tu presencia
+          <p className="text-sm text-muted-foreground">
+            Completa el formulario para confirmar tu presencia
           </p>
         </div>
 
-        <Card className="p-8 bg-card/90 backdrop-blur">
-          <form onSubmit={handleSubmit} className="space-y-6">
-            <div className="space-y-2">
-              <Label htmlFor="name" className="text-base font-medium">
-                Nombre Completo *
-              </Label>
+        <Card className="px-4 py-4 bg-card/90 backdrop-blur">
+          <form onSubmit={handleSubmit} className="space-y-3">
+            <div>
               <Input
                 id="name"
                 type="text"
-                placeholder="Tu nombre"
+                placeholder="Nombre completo *"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 required
-                className="h-12"
+                className="h-10"
               />
             </div>
 
-            <div className="space-y-3">
-              <Label className="text-base font-medium">¿Podrás asistir? *</Label>
-              <RadioGroup value={attending} onValueChange={setAttending} className="flex gap-4">
-                <div className="flex items-center space-x-3 p-4 rounded-lg border-2 border-border hover:border-accent transition-colors flex-1">
+            <div className="space-y-1">
+              <Label className="text-sm font-medium">¿Podrás asistir? *</Label>
+              <RadioGroup value={attending} onValueChange={setAttending} className="flex gap-2">
+                <div className="flex items-center space-x-2 px-3 py-2 rounded-lg border border-border hover:border-accent transition-colors flex-1">
                   <RadioGroupItem value="si" id="si" />
-                  <Label htmlFor="si" className="cursor-pointer flex-1">
+                  <Label htmlFor="si" className="cursor-pointer flex-1 text-sm">
                     Sí, asistiré
                   </Label>
                 </div>
-                <div className="flex items-center space-x-3 p-4 rounded-lg border-2 border-border hover:border-accent transition-colors flex-1">
+                <div className="flex items-center space-x-2 px-3 py-2 rounded-lg border border-border hover:border-accent transition-colors flex-1">
                   <RadioGroupItem value="no" id="no" />
-                  <Label htmlFor="no" className="cursor-pointer flex-1">
-                    No podré asistir
+                  <Label htmlFor="no" className="cursor-pointer flex-1 text-sm">
+                    No podré
                   </Label>
                 </div>
               </RadioGroup>
             </div>
 
             {attending === 'si' && (
-              <div className="space-y-2">
-                <Label htmlFor="guests" className="text-base font-medium">
-                  Número de acompañantes
-                </Label>
+              <div>
                 <Input
                   id="guests"
                   type="number"
                   min="1"
                   max="10"
+                  placeholder="Nº de acompañantes (incluyéndote)"
                   value={guests}
                   onChange={(e) => setGuests(e.target.value)}
-                  className="h-12"
+                  className="h-10"
                 />
-                <p className="text-sm text-muted-foreground">
-                  Incluyéndote a ti
-                </p>
               </div>
             )}
 
-            <div className="space-y-2">
-              <Label htmlFor="message" className="text-base font-medium">
-                Mensaje (Opcional)
-              </Label>
+            <div>
               <Textarea
                 id="message"
-                placeholder="Deja un mensaje especial para Sofía..."
+                placeholder="Mensaje para Sofía (opcional)"
                 value={message}
                 onChange={(e) => setMessage(e.target.value)}
-                rows={4}
-                className="resize-none"
+                rows={2}
+                className="resize-none text-sm"
               />
             </div>
 
             <Button
               type="submit"
               disabled={isSubmitting}
-              className="w-full h-12 bg-accent hover:bg-accent/90 text-accent-foreground font-semibold text-lg"
+              className="w-full h-10 bg-accent hover:bg-accent/90 text-accent-foreground font-semibold"
             >
               {isSubmitting ? (
                 'Enviando...'
               ) : (
                 <span className="flex items-center justify-center gap-2">
-                  <Check size={20} weight="bold" />
+                  <Check size={18} weight="bold" />
                   Confirmar Asistencia
                 </span>
               )}
@@ -182,8 +171,8 @@ export function RSVP() {
         </Card>
 
         {rsvps.length > 0 && (
-          <div className="mt-8 text-center text-muted-foreground">
-            <p className="text-sm">
+          <div className="mt-3 text-center text-muted-foreground">
+            <p className="text-xs">
               {rsvps.filter(r => r.attending === 'si').length} persona(s) han confirmado su asistencia
             </p>
           </div>

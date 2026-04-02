@@ -59,21 +59,21 @@ export function BookCover() {
       <div className="book-cover__art">
         <img
           ref={img1Ref}
-          src="/img/erase1.webp"
+          src="/img/erase1.png"
           alt="Érase una vez"
           className="book-cover__img"
           style={{ opacity: 0 }}
         />
         <img
           ref={img2Ref}
-          src="/img/erase2.webp"
+          src="/img/erase2.png"
           alt="Destellos"
           className="book-cover__img"
           style={{ opacity: 0 }}
         />
         <img
           ref={img3Ref}
-          src="/img/erase3.webp"
+          src="/img/erase3.png"
           alt="Érase una vez completo"
           className="book-cover__img book-cover__img--top"
           style={{ opacity: 0 }}
@@ -88,16 +88,13 @@ export function BookMessage() {
   return (
     <div className="book-message">
       <img
-        src="/img/historia.png"
-        alt="Historia"
+        src="/img/bosque.jpg"
+        alt="Bosque"
         className="book-message__img"
       />
       <div className="book-message__content">
         <p className="book-message__line">
           En un reino envuelto por la bruma de los sueños, una joven que caminaba entre árboles milenarios y susurros de magia. Al llegar su primavera número quince, el bosque encantado ha decidido abrir sus puertas doradas para revelar su mayor tesoro.
-        </p>
-        <p className="book-message__line book-message__line--gold">
-          Te invitamos a ser testigo de un cuento que deja de ser leyenda para convertirse en historia.
         </p>
         <p className="book-message__line book-message__line--gold">
           ¡Bienvenidos a mis quince años!

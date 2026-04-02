@@ -1,5 +1,8 @@
 import { useRef, useMemo } from 'react'
 import * as THREE from 'three'
+import { extend } from '@react-three/fiber'
+
+extend(THREE)
 
 // ── Vertex Shader ────────────────────────────────────────
 const vertexShader = /* glsl */ `
@@ -7,6 +10,7 @@ uniform float uTime;
 uniform float uProgress;
 uniform float uHingeOffset;
 uniform float uDeformStrength;
+uniform float uGrabY; // NEW: Where did the user grab the page vertically? (-1.0 to 1.0)
 
 varying vec2 vUv;
 varying float vFold;
@@ -19,29 +23,42 @@ void main() {
 
   // Normalised distance from the spine (left edge = 0, right = 1)
   float xNorm = clamp((pos.x + uHingeOffset) / (2.0 * uHingeOffset), 0.0, 1.0);
+  
+  // Normalised vertical distance (to curve based on where we grabbed it)
+  // Assuming height is roughly 3.0 (from props), map to roughly 0.0 (bottom) to 1.0 (top)
+  float yNorm = (pos.y / 3.0) + 0.5;
 
   // Page rotation angle (0 → -PI)
   float angle = -uProgress * PI;
 
   // ── Curl deformation ──────────────────────────────────
-  // Greatest at mid-flip, strongest away from the spine
-  float flipMid  = sin(uProgress * PI);                // peaks at 0.5
-  float curlWave = sin(xNorm * PI);                     // peaks in the middle of the page
+  float flipMid  = sin(uProgress * PI);
+  
+  // If we grabbed Top (uGrabY > 0), bottom stays flatter. If Bottom, top stays flatter.
+  // We bias the curl wave based on the difference between the vertex Y and the grab Y.
+  float grabInfluence = 1.0 - abs(uGrabY - pos.y) * 0.2; 
+  grabInfluence = clamp(grabInfluence, 0.4, 1.0); // Don't let it be completely rigid
+
+  float curlWave = sin(xNorm * PI) * grabInfluence;                     
   float curl     = curlWave * flipMid * uDeformStrength;
 
-  // Additional subtle leading-edge lift (paper "peels" away)
-  float edgeLift = smoothstep(0.55, 1.0, xNorm) * flipMid * uDeformStrength * 0.4;
+  // Subtle leading-edge lift 
+  float edgeLift = smoothstep(0.55, 1.0, xNorm) * flipMid * uDeformStrength * (0.4 * grabInfluence);
 
   // Apply curl to Z before rotation
   pos.z += curl + edgeLift;
 
-  // ── Hinge rotation around left edge (Y-axis) ─────────
-  // Shift origin to the spine, rotate, shift back
-  float xFromHinge = pos.x + uHingeOffset;
-  pos.x = -uHingeOffset + xFromHinge * cos(angle);
-  pos.z = pos.z + xFromHinge * sin(angle);
+  // ── Hinge rotation ─────────
+  // Add a slight skew (diagonal fold) if grabbed from a corner
+  // This slightly twists the page
+  float diagonalSkew = (pos.y * uGrabY * -0.15) * flipMid;
+  float adjustedAngle = angle + (xNorm * diagonalSkew);
 
-  // Tiny Y wiggle to sell the paper feel
+  float xFromHinge = pos.x + uHingeOffset;
+  pos.x = -uHingeOffset + xFromHinge * cos(adjustedAngle);
+  pos.z = pos.z + xFromHinge * sin(adjustedAngle);
+
+  // Tiny Y wiggle
   pos.y += sin(xNorm * PI * 2.0 + uTime * 0.5) * flipMid * 0.003;
 
   vFold = curl + edgeLift;
@@ -100,6 +117,8 @@ function makeSolidTexture(color: string): THREE.Texture {
 export interface BookPageMeshProps {
   /** 0 = closed (flat right), 1 = fully flipped (flat left) */
   progress: number
+  /** Where the user grabbed the page on the Y axis (-1 to 1). Defaults to 0 (middle) */
+  grabY?: number
   /** Width of the page plane in world units */
   width?: number
   /** Height of the page plane in world units */
@@ -116,10 +135,15 @@ export interface BookPageMeshProps {
   zOffset?: number
   /** elapsed time (animated externally via useFrame if desired) */
   time?: number
+  /** Click/Drag handlers */
+  onPointerDown?: (e: THREE.Event) => void
+  onPointerMove?: (e: THREE.Event) => void
+  onPointerUp?: (e: THREE.Event) => void
 }
 
 export function BookPageMesh({
   progress,
+  grabY = 0,
   width = 2,
   height = 3,
   segments = 48,
@@ -128,6 +152,9 @@ export function BookPageMesh({
   backTexture,
   zOffset = 0,
   time = 0,
+  onPointerDown,
+  onPointerMove,
+  onPointerUp
 }: BookPageMeshProps) {
   const meshRef = useRef<THREE.Mesh>(null)
 
@@ -140,30 +167,39 @@ export function BookPageMesh({
       uProgress: { value: 0 },
       uHingeOffset: { value: width / 2 },
       uDeformStrength: { value: deformStrength },
+      uGrabY: { value: grabY },
       uFrontTexture: { value: frontTexture ?? defaultFront },
       uBackTexture: { value: backTexture ?? defaultBack },
     }),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [],
-  )
+                                            // eslint-disable-next-line react-hooks/exhaustive-deps
+                                            [],
+                                          )
 
-  // Update uniforms each frame (driven by parent)
-  uniforms.uProgress.value = progress
-  uniforms.uTime.value = time
-  uniforms.uDeformStrength.value = deformStrength
-  if (frontTexture) uniforms.uFrontTexture.value = frontTexture
-  if (backTexture) uniforms.uBackTexture.value = backTexture
+                                          // Update uniforms each frame (driven by parent)
+                                          uniforms.uProgress.value = progress
+                                          uniforms.uTime.value = time
+                                          uniforms.uDeformStrength.value = deformStrength
+                                          uniforms.uGrabY.value = grabY
+                                          if (frontTexture) uniforms.uFrontTexture.value = frontTexture
+                                          if (backTexture) uniforms.uBackTexture.value = backTexture
 
-  return (
-    <mesh ref={meshRef} position={[0, 0, zOffset]}>
-      <planeGeometry args={[width, height, segments, segments]} />
-      <shaderMaterial
-        uniforms={uniforms}
-        vertexShader={vertexShader}
-        fragmentShader={fragmentShader}
-        side={THREE.DoubleSide}
-        transparent
-      />
-    </mesh>
-  )
-}
+                                          return (
+                                            <mesh 
+                                              ref={meshRef} 
+                                              position={[0, 0, zOffset]}
+                                              onPointerDown={onPointerDown}
+                                              onPointerMove={onPointerMove}
+                                              onPointerUp={onPointerUp}
+                                              onPointerOut={onPointerUp /* cancel drag */ }
+                                            >
+                                              <planeGeometry args={[width, height, segments, segments]} />
+                                              <shaderMaterial
+                                                uniforms={uniforms}
+                                                vertexShader={vertexShader}
+                                                fragmentShader={fragmentShader}
+                                                side={THREE.DoubleSide}
+                                                transparent
+                                              />
+                                            </mesh>
+                                          )
+                                        }

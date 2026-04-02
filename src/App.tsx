@@ -1,39 +1,46 @@
+import { lazy, Suspense } from 'react'
 import { BookCover, BookMessage, BookSofia } from '@/components/sections/BookCover'
 import { StoryBook } from '@/components/StoryBook'
-import { Countdown } from '@/components/sections/Countdown'
-import { EventDetails } from '@/components/sections/EventDetails'
-import { Location } from '@/components/sections/Location'
-import { RSVP } from '@/components/sections/RSVP'
-import { PhotoGallery } from '@/components/sections/PhotoGallery'
-import { GiftRegistry } from '@/components/sections/GiftRegistry'
-import { MusicPlaylist } from '@/components/sections/MusicPlaylist'
 import { Toaster } from '@/components/ui/sonner'
-import { Butterflies } from '@/components/effects/Butterflies'
-import { MagicParticles } from '@/components/effects/MagicParticles'
-import { MagicalFireflies } from '@/components/effects/MagicalFireflies'
 import { BackgroundMusic } from '@/components/BackgroundMusic'
+
+// Lazy load components that aren't visible on the first page
+const Countdown = lazy(() => import('@/components/sections/Countdown').then(m => ({ default: m.Countdown })))
+const EventDetails = lazy(() => import('@/components/sections/EventDetails').then(m => ({ default: m.EventDetails })))
+const Location = lazy(() => import('@/components/sections/Location').then(m => ({ default: m.Location })))
+const RSVP = lazy(() => import('@/components/sections/RSVP').then(m => ({ default: m.RSVP })))
+const PhotoGallery = lazy(() => import('@/components/sections/PhotoGallery').then(m => ({ default: m.PhotoGallery })))
+const GiftRegistry = lazy(() => import('@/components/sections/GiftRegistry').then(m => ({ default: m.GiftRegistry })))
+const MusicPlaylist = lazy(() => import('@/components/sections/MusicPlaylist').then(m => ({ default: m.MusicPlaylist })))
+const Butterflies = lazy(() => import('@/components/effects/Butterflies').then(m => ({ default: m.Butterflies })))
+const MagicParticles = lazy(() => import('@/components/effects/MagicParticles').then(m => ({ default: m.MagicParticles })))
+const MagicalFireflies = lazy(() => import('@/components/effects/MagicalFireflies').then(m => ({ default: m.MagicalFireflies })))
+
+const LazyFallback = () => <div className="w-full h-full bg-[#091a12]" />
 
 function App() {
   return (
     <div className="app-wrapper">
       <Toaster position="top-center" />
       <BackgroundMusic />
-      <MagicParticles />
-      <MagicalFireflies />
-      <Butterflies />
+      <Suspense fallback={null}>
+        <MagicParticles />
+        <MagicalFireflies />
+        <Butterflies />
+      </Suspense>
 
       <StoryBook>
         {[
           <BookCover key="cover" />,
           <BookMessage key="message" />,
           <BookSofia key="sofia" />,
-          <Countdown key="countdown" />,
-          <EventDetails key="details" />,
-          <Location key="location" />,
-          <RSVP key="rsvp" />,
-          <PhotoGallery key="gallery" />,
-          <GiftRegistry key="gifts" />,
-          <MusicPlaylist key="music" />,
+          <Suspense key="countdown" fallback={<LazyFallback />}><Countdown /></Suspense>,
+          <Suspense key="details" fallback={<LazyFallback />}><EventDetails /></Suspense>,
+          <Suspense key="location" fallback={<LazyFallback />}><Location /></Suspense>,
+          <Suspense key="rsvp" fallback={<LazyFallback />}><RSVP /></Suspense>,
+          <Suspense key="gallery" fallback={<LazyFallback />}><PhotoGallery /></Suspense>,
+          <Suspense key="gifts" fallback={<LazyFallback />}><GiftRegistry /></Suspense>,
+          <Suspense key="music" fallback={<LazyFallback />}><MusicPlaylist /></Suspense>,
         ]}
       </StoryBook>
     </div>

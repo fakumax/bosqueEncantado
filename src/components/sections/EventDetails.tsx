@@ -49,34 +49,34 @@ export function EventDetails() {
   ]
 
   return (
-    <section ref={sectionRef} id="detalles" className="presentation-slide px-4">
-      <div className="container mx-auto max-w-6xl">
-        <div className="text-center mb-12">
-          <h2 className="font-playfair text-3xl md:text-5xl font-bold text-foreground mb-4">
+    <section ref={sectionRef} id="detalles" className="presentation-slide px-4" style={{ justifyContent: 'center' }}>
+      <div className="container mx-auto max-w-md w-full">
+        <div className="text-center mb-4">
+          <h2 className="font-playfair text-2xl md:text-4xl font-bold text-foreground mb-2">
             Detalles del Evento
           </h2>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+          <p className="text-sm text-muted-foreground max-w-xs mx-auto leading-snug">
             Prepárate para una noche mágica llena de alegría, música y momentos inolvidables
           </p>
         </div>
 
-        <div className="grid md:grid-cols-2 gap-6">
+        <div className="flex flex-col gap-3">
           {details.map((detail) => {
             const Icon = detail.icon
             return (
               <Card
                 key={detail.title}
-                className="p-6 bg-card/90 backdrop-blur hover:scale-105 transition-transform duration-300"
+                className="px-4 py-3 bg-card/90 backdrop-blur"
               >
-                <div className="flex items-start gap-4">
-                  <div className="p-3 bg-accent/20 rounded-lg">
-                    <Icon size={32} weight="duotone" className="text-accent" />
+                <div className="flex items-center gap-3">
+                  <div className="p-2 bg-accent/20 rounded-lg shrink-0">
+                    <Icon size={24} weight="duotone" className="text-accent" />
                   </div>
-                  <div className="flex-1">
-                    <h3 className="font-semibold text-foreground text-lg mb-1">
+                  <div className="flex-1 min-w-0">
+                    <h3 className="font-semibold text-foreground text-sm uppercase tracking-wide">
                       {detail.title}
                     </h3>
-                    <p className="text-muted-foreground">
+                    <p className="text-muted-foreground text-sm leading-tight">
                       {detail.value}
                     </p>
                   </div>

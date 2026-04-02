@@ -7,7 +7,6 @@ import gsap from 'gsap'
  * The file will be served from /music/<filename>.
  */
 const MUSIC_MP3 = '/music/Magical Forest.mp3'
-const MUSIC_OGG = '/music/Magical Forest.ogg'
 
 export function BackgroundMusic() {
   const audioRef = useRef<HTMLAudioElement>(null)
@@ -87,7 +86,6 @@ export function BackgroundMusic() {
     <>
       <audio ref={audioRef} loop preload="auto">
         <source src={MUSIC_MP3} type="audio/mpeg" />
-        <source src={MUSIC_OGG} type="audio/ogg" />
       </audio>
 
       <button

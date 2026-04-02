@@ -1,6 +1,5 @@
 import { useEffect, useRef } from 'react'
-import { Card } from '@/components/ui/card'
-import { MusicNotes } from '@phosphor-icons/react'
+import { Sparkle } from '@phosphor-icons/react'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 
@@ -25,50 +24,34 @@ export function MusicPlaylist() {
     }, sectionRef)
     return () => ctx.revert()
   }, [])
-  const spotifyPlaylistId = '37i9dQZF1DXcBWIGoYBM5M'
 
   return (
-    <section ref={sectionRef} id="musica" className="presentation-slide px-4">
-      <div className="container mx-auto max-w-4xl">
-        <div className="text-center mb-12">
-          <div className="inline-flex items-center justify-center mb-4">
-            <MusicNotes size={40} weight="duotone" className="text-accent" />
-          </div>
-          <h2 className="font-playfair text-3xl md:text-5xl font-bold text-foreground mb-4">
-            Lista de Reproducción
+    <section ref={sectionRef} id="despedida" className="presentation-slide px-4" style={{ justifyContent: 'center' }}>
+      <div className="container mx-auto max-w-md w-full text-center">
+        <div className="mb-6">
+          <Sparkle size={40} weight="duotone" className="text-accent mx-auto mb-4" />
+          <h2 className="font-playfair text-2xl md:text-3xl font-bold text-foreground mb-3">
+            ¡Los espero!
           </h2>
-          <p className="text-lg text-muted-foreground">
-            Escucha la música que sonará en la fiesta
-          </p>
         </div>
 
-        <Card className="p-4 bg-card/90 backdrop-blur">
-          <div className="aspect-[4/5] md:aspect-video w-full">
-            <iframe
-              style={{ borderRadius: '12px' }}
-              src={`https://open.spotify.com/embed/playlist/${spotifyPlaylistId}?utm_source=generator&theme=0`}
-              width="100%"
-              height="100%"
-              frameBorder="0"
-              allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
-              loading="lazy"
-            />
-          </div>
-        </Card>
+        <p className="text-foreground/80 text-sm leading-relaxed mb-6">
+          Cada historia tiene un capítulo que marca para siempre.
+          Este es el mío, y quiero que seas parte de él.
+        </p>
 
-        <div className="mt-8 text-center">
-          <p className="text-muted-foreground mb-4">
-            ¿Tienes alguna sugerencia de canción?
+        <p className="text-foreground/80 text-sm leading-relaxed mb-8">
+          Preparate para una noche mágica donde los sueños
+          se hacen realidad entre luces, risas y la magia
+          de un bosque encantado.
+        </p>
+
+        <div className="flex items-center justify-center gap-2 text-accent">
+          <Sparkle size={16} weight="fill" />
+          <p className="font-playfair text-lg italic text-accent">
+            Con todo mi cariño, Sofía
           </p>
-          <a
-            href={`https://open.spotify.com/playlist/${spotifyPlaylistId}`}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 text-accent hover:text-accent/80 font-medium transition-colors"
-          >
-            <MusicNotes size={20} weight="bold" />
-            Abrir en Spotify
-          </a>
+          <Sparkle size={16} weight="fill" />
         </div>
       </div>
     </section>
