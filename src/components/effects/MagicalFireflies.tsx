@@ -1,7 +1,8 @@
 import { useEffect, useRef, useMemo } from 'react'
 import gsap from 'gsap'
 
-const FIREFLY_COUNT = 25
+const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent) || window.innerWidth < 768
+const FIREFLY_COUNT = isMobile ? 8 : 25
 
 // Palette ranging from warm gold to cool white
 const COLORS = [
@@ -74,7 +75,14 @@ export function MagicalFireflies() {
       return null
     }
 
+    let lastMoveTime = 0
+    const THROTTLE_MS = isMobile ? 150 : 16 // Throttle touch heavily on mobile
+
     const onMove = (e: MouseEvent | TouchEvent) => {
+      const now = Date.now()
+      if (now - lastMoveTime < THROTTLE_MS) return
+      lastMoveTime = now
+
       const pos = getPointer(e)
       if (!pos) return
 
@@ -89,7 +97,7 @@ export function MagicalFireflies() {
         gsap.to(p, {
           x: pos.x + Math.cos(angle) * radius,
           y: pos.y + Math.sin(angle) * radius,
-          duration: 0.4 + i * 0.04,
+          duration: isMobile ? 0.8 : 0.4 + i * 0.04,
           ease: 'power2.out',
           overwrite: 'auto',
         })
@@ -97,8 +105,11 @@ export function MagicalFireflies() {
     }
 
     window.addEventListener('mousemove', onMove)
+    // On mobile, only react to touchstart (not continuous touchmove)
     window.addEventListener('touchstart', onMove, { passive: true })
-    window.addEventListener('touchmove', onMove, { passive: true })
+    if (!isMobile) {
+      window.addEventListener('touchmove', onMove, { passive: true })
+    }
 
     return () => {
       window.removeEventListener('mousemove', onMove)
@@ -132,8 +143,10 @@ export function MagicalFireflies() {
             height: f.size,
             borderRadius: '50%',
             backgroundColor: f.color.bg,
-            boxShadow: `0 0 ${f.glowSize}px ${f.glowSize * 0.5}px ${f.color.bg}, 0 0 ${f.glowSize * 2.5}px ${f.glowSize}px ${f.color.glow}`,
-            filter: `blur(${f.blur}px)`,
+            boxShadow: isMobile
+              ? `0 0 ${f.glowSize * 0.5}px ${f.color.bg}`
+              : `0 0 ${f.glowSize}px ${f.glowSize * 0.5}px ${f.color.bg}, 0 0 ${f.glowSize * 2.5}px ${f.glowSize}px ${f.color.glow}`,
+            filter: isMobile ? undefined : `blur(${f.blur}px)`,
             willChange: 'transform, opacity',
           }}
         />

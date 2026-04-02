@@ -56,8 +56,62 @@ export function StoryBook({ children }: StoryBookProps) {
     const handleResize = () => initPageFlip()
     window.addEventListener('resize', handleResize)
 
+    // ── Scroll / swipe vertical → cambiar página ──
+    let lastFlipTime = 0
+    const FLIP_COOLDOWN = 800 // ms — evita saltar múltiples páginas de golpe
+
+    const tryFlip = (direction: 'next' | 'prev') => {
+      const now = Date.now()
+      if (now - lastFlipTime < FLIP_COOLDOWN) return
+      if (!pageFlipRef.current) return
+      lastFlipTime = now
+
+      if (direction === 'next') {
+        pageFlipRef.current.flipNext('top')
+      } else {
+        pageFlipRef.current.flipPrev('top')
+      }
+    }
+
+    // Mouse wheel
+    const handleWheel = (e: WheelEvent) => {
+      e.preventDefault()
+      if (Math.abs(e.deltaY) < 15) return // ignore tiny scroll jitter
+      tryFlip(e.deltaY > 0 ? 'next' : 'prev')
+    }
+
+    // Touch vertical swipe
+    let touchStartY = 0
+    let touchStartX = 0
+
+    const handleTouchStart = (e: TouchEvent) => {
+      touchStartY = e.touches[0].clientY
+      touchStartX = e.touches[0].clientX
+    }
+
+    const handleTouchEnd = (e: TouchEvent) => {
+      const dy = touchStartY - e.changedTouches[0].clientY
+      const dx = Math.abs(touchStartX - e.changedTouches[0].clientX)
+      // Solo activar si el swipe es más vertical que horizontal y tiene recorrido suficiente
+      if (Math.abs(dy) > 50 && Math.abs(dy) > dx) {
+        tryFlip(dy > 0 ? 'next' : 'prev')
+      }
+    }
+
+    const container = containerRef.current
+    if (container) {
+      container.addEventListener('wheel', handleWheel, { passive: false })
+      container.addEventListener('touchstart', handleTouchStart, { passive: true })
+      container.addEventListener('touchend', handleTouchEnd, { passive: true })
+    }
+
     return () => {
       window.removeEventListener('resize', handleResize)
+      if (container) {
+        container.removeEventListener('wheel', handleWheel)
+        container.removeEventListener('touchstart', handleTouchStart)
+        container.removeEventListener('touchend', handleTouchEnd)
+      }
       if (pageFlipRef.current) {
         pageFlipRef.current.destroy()
         pageFlipRef.current = null

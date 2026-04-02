@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
 
-const PARTICLE_COUNT = 30
+const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent) || window.innerWidth < 768
+const PARTICLE_COUNT = isMobile ? 10 : 30
 
 const COLORS = [
   '#FFD700',  // gold
@@ -67,8 +68,10 @@ export function Butterflies() {
             height: s.size,
             borderRadius: '50%',
             backgroundColor: s.color,
-            boxShadow: `0 0 ${s.glowSize}px ${s.glowSize * 0.5}px ${s.color}, 0 0 ${s.glowSize * 2.5}px ${s.glowSize}px ${s.color}40`,
-            filter: `blur(${s.blur}px)`,
+            boxShadow: isMobile
+              ? `0 0 ${s.glowSize * 0.5}px ${s.color}`
+              : `0 0 ${s.glowSize}px ${s.glowSize * 0.5}px ${s.color}, 0 0 ${s.glowSize * 2.5}px ${s.glowSize}px ${s.color}40`,
+            filter: isMobile ? undefined : `blur(${s.blur}px)`,
           }}
           animate={{
             x: [...s.dx, 0],

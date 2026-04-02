@@ -4,8 +4,13 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger'
 
 gsap.registerPlugin(ScrollTrigger)
 
+const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent) || window.innerWidth < 768
+
 export function MagicParticles() {
   useEffect(() => {
+    // Skip entirely on mobile — fullscreen video + mix-blend-screen is too heavy
+    if (isMobile) return
+
     const ctx = gsap.context(() => {
       ScrollTrigger.create({
         trigger: '#inicio',
@@ -17,6 +22,9 @@ export function MagicParticles() {
 
     return () => ctx.revert()
   }, [])
+
+  // Don't render video on mobile at all
+  if (isMobile) return null
 
   return (
     <div
