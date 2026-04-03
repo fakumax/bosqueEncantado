@@ -120,12 +120,9 @@ export function BookSofia() {
           <SparkleText text="Sofía" />
         </div>
 
-        <div className="space-y-2 mb-8">
-          <p className="text-xl md:text-2xl text-foreground/80 font-medium">
-            Celebra conmigo mis XV años
-          </p>
-          <p className="text-lg md:text-xl text-muted-foreground italic">
-            Un momento mágico para recordar
+        <div className="space-y-2 mb-8 max-w-md mx-auto px-4">
+          <p className="text-lg md:text-xl text-foreground/90 font-medium leading-relaxed text-center">
+            Sigue el rastro de polvo de hadas y acompáñame a celebrar el inicio de mi propia aventura en este bosque encantado
           </p>
         </div>
 
@@ -133,26 +130,6 @@ export function BookSofia() {
           <p className="text-accent font-semibold text-lg tracking-wide">
             6 de Junio, 2026
           </p>
-        </div>
-
-        <div className="mt-10 flex flex-wrap justify-center gap-4">
-          <button
-            className="hero-cta hero-cta--primary"
-            onClick={() => {
-              // Dispatch event that StoryBook can catch to navigate to RSVP page
-              window.dispatchEvent(new CustomEvent('storybook:goto', { detail: { sectionId: 'rsvp' } }))
-            }}
-          >
-            Confirmar Asistencia
-          </button>
-          <button
-            className="hero-cta hero-cta--secondary"
-            onClick={() => {
-              window.dispatchEvent(new CustomEvent('storybook:goto', { detail: { sectionId: 'detalles' } }))
-            }}
-          >
-            Ver Detalles
-          </button>
         </div>
       </div>
     </div>

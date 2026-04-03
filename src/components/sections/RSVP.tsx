@@ -93,6 +93,9 @@ export function RSVP() {
           <p className="text-sm text-muted-foreground">
             Completa el formulario para confirmar tu presencia
           </p>
+          <p className="text-xs text-accent font-medium mt-1">
+            Fecha límite para confirmación de asistencia 6/5/2026
+          </p>
         </div>
 
         <Card className="px-4 py-4 bg-card/90 backdrop-blur">

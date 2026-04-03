@@ -6,12 +6,13 @@ import { BackgroundMusic } from '@/components/BackgroundMusic'
 
 // Lazy load components that aren't visible on the first page
 const Countdown = lazy(() => import('@/components/sections/Countdown').then(m => ({ default: m.Countdown })))
+const Ceremony = lazy(() => import('@/components/sections/Ceremony').then(m => ({ default: m.Ceremony })))
 const EventDetails = lazy(() => import('@/components/sections/EventDetails').then(m => ({ default: m.EventDetails })))
-const Location = lazy(() => import('@/components/sections/Location').then(m => ({ default: m.Location })))
 const RSVP = lazy(() => import('@/components/sections/RSVP').then(m => ({ default: m.RSVP })))
+const DressCode = lazy(() => import('@/components/sections/DressCode').then(m => ({ default: m.DressCode })))
 const PhotoGallery = lazy(() => import('@/components/sections/PhotoGallery').then(m => ({ default: m.PhotoGallery })))
 const GiftRegistry = lazy(() => import('@/components/sections/GiftRegistry').then(m => ({ default: m.GiftRegistry })))
-const MusicPlaylist = lazy(() => import('@/components/sections/MusicPlaylist').then(m => ({ default: m.MusicPlaylist })))
+const ThankYou = lazy(() => import('@/components/sections/ThankYou').then(m => ({ default: m.ThankYou })))
 const Butterflies = lazy(() => import('@/components/effects/Butterflies').then(m => ({ default: m.Butterflies })))
 const MagicParticles = lazy(() => import('@/components/effects/MagicParticles').then(m => ({ default: m.MagicParticles })))
 const MagicalFireflies = lazy(() => import('@/components/effects/MagicalFireflies').then(m => ({ default: m.MagicalFireflies })))
@@ -34,13 +35,14 @@ function App() {
           <BookCover key="cover" />,
           <BookMessage key="message" />,
           <BookSofia key="sofia" />,
+          <Suspense key="ceremony" fallback={<LazyFallback />}><Ceremony /></Suspense>,
           <Suspense key="countdown" fallback={<LazyFallback />}><Countdown /></Suspense>,
           <Suspense key="details" fallback={<LazyFallback />}><EventDetails /></Suspense>,
-          <Suspense key="location" fallback={<LazyFallback />}><Location /></Suspense>,
           <Suspense key="rsvp" fallback={<LazyFallback />}><RSVP /></Suspense>,
-          <Suspense key="gallery" fallback={<LazyFallback />}><PhotoGallery /></Suspense>,
+          <Suspense key="dresscode" fallback={<LazyFallback />}><DressCode /></Suspense>,
           <Suspense key="gifts" fallback={<LazyFallback />}><GiftRegistry /></Suspense>,
-          <Suspense key="music" fallback={<LazyFallback />}><MusicPlaylist /></Suspense>,
+          <Suspense key="gallery" fallback={<LazyFallback />}><PhotoGallery /></Suspense>,
+          <Suspense key="thankyou" fallback={<LazyFallback />}><ThankYou /></Suspense>,
         ]}
       </StoryBook>
     </div>
