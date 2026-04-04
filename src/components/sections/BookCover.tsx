@@ -88,7 +88,7 @@ export function BookMessage() {
   return (
     <div className="book-message">
       <img
-        src="/img/bosque.jpg"
+        src="/img/2-cuento/2.png"
         alt="Bosque"
         className="book-message__img"
       />

@@ -26,31 +26,15 @@ export function ThankYou() {
   }, [])
 
   return (
-    <section ref={sectionRef} id="despedida" className="presentation-slide px-4" style={{ justifyContent: 'center' }}>
-      <div className="container mx-auto max-w-md w-full text-center">
-        <div className="mb-6">
-          <Sparkle size={40} weight="duotone" className="text-accent mx-auto mb-4" />
+    <section ref={sectionRef} id="despedida" style={{ width: '100%', height: '100vh' }}>
+      <div className="book-message">
+        <img
+          src="/img/11-despedida/11.png"
+          alt="Despedida"
+          className="book-message__img"
+        />
+      
         </div>
-
-        <p className="text-foreground/80 text-sm leading-relaxed mb-6">
-          Preparate para una noche mágica donde los sueños
-          se hacen realidad entre luces, risas y la magia
-          de un bosque encantado.
-        </p>
-
-        <p className="text-foreground/80 text-sm leading-relaxed mb-8">
-          Cada historia tiene un capítulo que marca para siempre.
-          Este es el mío, y quiero que seas parte de él.
-        </p>
-
-        <div className="flex items-center justify-center gap-2 text-accent">
-          <Sparkle size={16} weight="fill" />
-          <p className="font-playfair text-lg italic text-accent">
-            Con todo mi cariño, Sofía
-          </p>
-          <Sparkle size={16} weight="fill" />
-        </div>
-      </div>
     </section>
   )
 }
