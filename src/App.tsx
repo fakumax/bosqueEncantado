@@ -43,6 +43,15 @@ function App() {
           <Suspense key="gifts" fallback={<LazyFallback />}><GiftRegistry /></Suspense>,
           <Suspense key="gallery" fallback={<LazyFallback />}><PhotoGallery /></Suspense>,
           <Suspense key="thankyou" fallback={<LazyFallback />}><ThankYou /></Suspense>,
+          <section key="final" style={{ width: '100%', height: '100vh' }}>
+            <div className="book-message">
+              <img
+                src="/img/12-final/12.png"
+                alt="Final"
+                className="book-message__img"
+              />
+            </div>
+          </section>,
         ]}
       </StoryBook>
     </div>
