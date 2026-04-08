@@ -38,13 +38,13 @@ export function EventDetails() {
         {/* Botón interactivo sobre la imagen, posicionado un poco más arriba de la mitad */}
         <div
           className="absolute flex items-center justify-center w-full z-10"
-          style={{ top: '42%', left: '50%', transform: 'translate(-50%, -50%)' }}
+          style={{ top: '45%', left: '50%', transform: 'translate(-50%, -50%)' }}
         >
           <a
             href={mapsUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="bg-[#C9A84C] text-[#091a12] shadow-[0_0_20px_rgba(201,168,76,0.6)] px-10 py-3.5 rounded-full font-bold hover:bg-[#ebd594] transition-all uppercase tracking-widest text-sm flex items-center gap-2 hover:scale-105"
+            className="bg-[#091a12] text-white shadow-[0_4px_15px_rgba(0,0,0,0.6)] border border-[#c9a84c]/50 px-10 py-3.5 rounded-full font-bold hover:bg-[#133221] transition-all uppercase tracking-widest text-sm flex items-center gap-2 hover:scale-105 hover:shadow-[0_0_20px_rgba(201,168,76,0.5)]"
           >
             CÓMO LLEGAR
           </a>

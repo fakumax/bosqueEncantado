@@ -49,7 +49,7 @@ export function RSVP() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    
+
     if (!name.trim()) {
       toast.error('Por favor ingresa tu nombre')
       return
@@ -68,8 +68,8 @@ export function RSVP() {
 
     setRsvps(currentRsvps => [...currentRsvps, newRsvp])
 
-    toast.success(attending === 'si' 
-      ? '¡Gracias por confirmar tu asistencia!' 
+    toast.success(attending === 'si'
+      ? '¡Gracias por confirmar tu asistencia!'
       : 'Gracias por tu respuesta. ¡Te echaremos de menos!'
     )
 
@@ -81,105 +81,111 @@ export function RSVP() {
   }
 
   return (
-    <section ref={sectionRef} id="rsvp" className="presentation-slide px-4" style={{ justifyContent: 'center' }}>
-      <div className="container mx-auto max-w-md w-full">
-        <div className="text-center mb-4">
-          <div className="inline-flex items-center justify-center mb-2">
-            <EnvelopeSimple size={28} weight="duotone" className="text-accent" />
-          </div>
-          <h2 className="font-playfair text-2xl md:text-3xl font-bold text-foreground mb-1">
-            Confirma tu Asistencia
-          </h2>
-          <p className="text-sm text-muted-foreground">
-            Completa el formulario para confirmar tu presencia
-          </p>
-          <p className="text-xs text-accent font-medium mt-1">
-            Fecha límite para confirmación de asistencia 6/5/2026
-          </p>
-        </div>
+    <section ref={sectionRef} id="rsvp" style={{ width: '100%', height: '100vh' }}>
+      <div className="book-message relative w-full h-full">
+        <img
+          src="/img/7-confirmacion/7.png"
+          alt="Confirmación"
+          className="book-message__img absolute inset-0 w-full h-full object-cover z-0"
+        />
 
-        <Card className="px-4 py-4 bg-card/90 backdrop-blur">
-          <form onSubmit={handleSubmit} className="space-y-3">
-            <div>
-              <Input
-                id="name"
-                type="text"
-                placeholder="Nombre completo *"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                required
-                className="h-10"
-              />
-            </div>
-
-            <div className="space-y-1">
-              <Label className="text-sm font-medium">¿Podrás asistir? *</Label>
-              <RadioGroup value={attending} onValueChange={setAttending} className="flex gap-2">
-                <div className="flex items-center space-x-2 px-3 py-2 rounded-lg border border-border hover:border-accent transition-colors flex-1">
-                  <RadioGroupItem value="si" id="si" />
-                  <Label htmlFor="si" className="cursor-pointer flex-1 text-sm">
-                    Sí, asistiré
-                  </Label>
-                </div>
-                <div className="flex items-center space-x-2 px-3 py-2 rounded-lg border border-border hover:border-accent transition-colors flex-1">
-                  <RadioGroupItem value="no" id="no" />
-                  <Label htmlFor="no" className="cursor-pointer flex-1 text-sm">
-                    No podré
-                  </Label>
-                </div>
-              </RadioGroup>
-            </div>
-
-            {attending === 'si' && (
-              <div>
-                <Input
-                  id="guests"
-                  type="number"
-                  min="1"
-                  max="10"
-                  placeholder="Nº de acompañantes (incluyéndote)"
-                  value={guests}
-                  onChange={(e) => setGuests(e.target.value)}
-                  className="h-10"
-                />
-              </div>
-            )}
-
-            <div>
-              <Textarea
-                id="message"
-                placeholder="Mensaje para Sofía (opcional)"
-                value={message}
-                onChange={(e) => setMessage(e.target.value)}
-                rows={2}
-                className="resize-none text-sm"
-              />
-            </div>
-
-            <Button
-              type="submit"
-              disabled={isSubmitting}
-              className="w-full h-10 bg-accent hover:bg-accent/90 text-accent-foreground font-semibold"
-            >
-              {isSubmitting ? (
-                'Enviando...'
-              ) : (
-                <span className="flex items-center justify-center gap-2">
-                  <Check size={18} weight="bold" />
-                  Confirmar Asistencia
-                </span>
-              )}
-            </Button>
-          </form>
-        </Card>
-
-        {rsvps.length > 0 && (
-          <div className="mt-3 text-center text-muted-foreground">
-            <p className="text-xs">
-              {rsvps.filter(r => r.attending === 'si').length} persona(s) han confirmado su asistencia
+        {/* Contenido colocado sobre la imagen */}
+        <div 
+          className="absolute z-10 w-full px-4 max-w-[340px]"
+          style={{ top: '30%', left: '50%', transform: 'translateX(-50%)' }}
+        >
+          <div className="text-center mb-3">
+            <p className="text-sm text-[#133221] font-bold drop-shadow-sm leading-tight">
+              Completa el formulario para confirmar tu presencia
+            </p>
+            <p className="text-xs text-[#8b6914] font-bold mt-1 drop-shadow-sm">
+              Fecha límite para confirmación de asistencia 6/5/2026
             </p>
           </div>
-        )}
+
+          <Card className="px-5 py-5 bg-[#091a12]/85 backdrop-blur-md border border-[#c9a84c]/40 rounded-2xl shadow-2xl">
+            <form onSubmit={handleSubmit} className="space-y-4">
+              <div>
+                <Input
+                  id="name"
+                  type="text"
+                  placeholder="Nombre completo *"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  required
+                  className="h-11 bg-[#133221]/60 border-[#c9a84c]/30 text-[#d4c896] placeholder:text-[#8BA995] focus:border-[#c9a84c] focus:ring-[#c9a84c]/20"
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label className="text-sm font-semibold text-[#d4c896]">¿Podrás asistir? *</Label> 
+                <RadioGroup value={attending} onValueChange={setAttending} className="flex gap-2">
+                  <div className="flex items-center space-x-2 px-3 py-2.5 rounded-lg border border-[#c9a84c]/30 hover:border-[#c9a84c] transition-colors flex-1 bg-[#133221]/40">
+                    <RadioGroupItem value="si" id="si" className="border-[#c9a84c] text-[#c9a84c]" />
+                    <Label htmlFor="si" className="cursor-pointer flex-1 text-sm font-medium text-[#d4c896]">
+                      Sí, asistiré
+                    </Label>
+                  </div>
+                  <div className="flex items-center space-x-2 px-3 py-2.5 rounded-lg border border-[#c9a84c]/30 hover:border-[#c9a84c] transition-colors flex-1 bg-[#133221]/40">
+                    <RadioGroupItem value="no" id="no" className="border-[#c9a84c] text-[#c9a84c]" />
+                    <Label htmlFor="no" className="cursor-pointer flex-1 text-sm font-medium text-[#d4c896]">
+                      No podré
+                    </Label>
+                  </div>
+                </RadioGroup>
+              </div>
+
+              {attending === 'si' && (
+                <div>
+                  <Input
+                    id="guests"
+                    type="number"
+                    min="1"
+                    max="10"
+                    placeholder="Nº de acompañantes (incluyéndote)"
+                    value={guests}
+                    onChange={(e) => setGuests(e.target.value)}
+                    className="h-11 bg-[#133221]/60 border-[#c9a84c]/30 text-[#d4c896] placeholder:text-[#8BA995] focus:border-[#c9a84c] focus:ring-[#c9a84c]/20"
+                  />
+                </div>
+              )}
+
+              <div>
+                <Textarea
+                  id="message"
+                  placeholder="Mensaje para Sofía (opcional)"
+                  value={message}
+                  onChange={(e) => setMessage(e.target.value)}
+                  rows={2}
+                  className="resize-none text-sm bg-[#133221]/60 border-[#c9a84c]/30 text-[#d4c896] placeholder:text-[#8BA995] focus:border-[#c9a84c] focus:ring-[#c9a84c]/20"
+                />
+              </div>
+
+              <Button
+                type="submit"
+                disabled={isSubmitting}
+                className="w-full h-11 bg-[#c9a84c] hover:bg-[#ebd594] text-[#091a12] font-bold uppercase tracking-wider text-sm transition-all"
+              >
+                {isSubmitting ? (
+                  'Enviando...'
+                ) : (
+                  <span className="flex items-center justify-center gap-2">       
+                    <Check size={20} weight="bold" />
+                    Confirmar Asistencia
+                  </span>
+                )}
+              </Button>
+            </form>
+          </Card>
+
+          {rsvps.length > 0 && (
+            <div className="mt-3 text-center text-[#133221]">
+              <p className="text-xs font-bold drop-shadow-sm">
+                {rsvps.filter(r => r.attending === 'si').length} persona(s) han confirmado su asistencia
+              </p>
+            </div>
+          )}
+        </div>
       </div>
     </section>
   )

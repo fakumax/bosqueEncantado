@@ -1,6 +1,4 @@
 import { useState, useEffect, useRef } from 'react'
-import { Card } from '@/components/ui/card'
-import { Clock } from '@phosphor-icons/react'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import FlipClockCountdown from '@leenguyen/react-flip-clock-countdown'
@@ -11,8 +9,8 @@ gsap.registerPlugin(ScrollTrigger)
 export function Countdown() {
   const [isEventPassed, setIsEventPassed] = useState(false)
   const targetDate = new Date('2026-06-06T21:00:00-03:00').getTime()
-  
   const [isMobile, setIsMobile] = useState(false)
+  const sectionRef = useRef<HTMLElement>(null)
 
   useEffect(() => {
     const handleResize = () => {
@@ -28,25 +26,6 @@ export function Countdown() {
       setIsEventPassed(true)
     }
   }, [targetDate])
-
-  if (isEventPassed) {
-    return (
-      <section id="countdown" className="presentation-slide px-4">
-        <div className="container mx-auto max-w-4xl text-center">
-          <Card className="p-8 bg-card/80 backdrop-blur">
-            <h2 className="font-playfair text-3xl font-bold text-foreground mb-4">
-              ¡La celebración ha llegado!
-            </h2>
-            <p className="text-muted-foreground">
-              Es hora de celebrar este momento mágico
-            </p>
-          </Card>
-        </div>
-      </section>
-    )
-  }
-
-  const sectionRef = useRef<HTMLElement>(null)
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -65,61 +44,70 @@ export function Countdown() {
     return () => ctx.revert()
   }, [])
 
-  return (
-    <section ref={sectionRef} id="countdown" className="presentation-slide px-4">
-      <div className="container mx-auto max-w-6xl">
-        <div className="text-center mb-12">
-          <div className="inline-flex items-center gap-2 mb-4">
-            <Clock size={32} weight="bold" className="text-accent" />
+  if (isEventPassed) {
+    return (
+      <section ref={sectionRef} id="countdown" style={{ width: '100%', height: '100vh' }}>
+        <div className="book-message">
+          <img
+            src="/img/5-cuenta-regresiva/5.png"
+            alt="Cuenta Regresiva"
+            className="book-message__img"
+          />
+          <div 
+            className="absolute flex items-center justify-center w-full z-10"
+            style={{ top: '33%', left: '50%', transform: 'translate(-50%, -50%)' }}
+          >
+            <h2 className="font-playfair text-3xl font-bold text-[#c9a84c] drop-shadow-md text-center px-4">
+              ¡La celebración ha llegado!
+            </h2>
           </div>
-          <h2 className="font-playfair text-3xl md:text-4xl font-bold text-foreground mb-2">
-            Cuenta Regresiva
-          </h2>
-          <p className="text-muted-foreground">
-            Faltan solo...
-          </p>
         </div>
+      </section>
+    )
+  }
 
-        <div className="flex justify-center items-center w-full">
-          <FlipClockCountdown 
-            to={targetDate} 
+  return (
+    <section ref={sectionRef} id="countdown" style={{ width: '100%', height: '100vh' }}>
+      <div className="book-message">
+        <img
+          src="/img/5-cuenta-regresiva/5.png"
+          alt="Cuenta Regresiva"
+          className="book-message__img"
+        />
+
+        <div 
+          className="absolute flex justify-center items-center w-full z-10"
+          style={{ top: '33%', left: '50%', transform: 'translate(-50%, -50%)' }}
+        >
+          <FlipClockCountdown
+            to={targetDate}
             labels={['Días', 'Horas', 'Minutos', 'Segundos']}
-            labelStyle={{ 
-              fontSize: isMobile ? 9 : 13, 
-              fontWeight: 500, 
-              textTransform: 'uppercase', 
-              color: '#a0b8a8', 
+            labelStyle={{
+              fontSize: isMobile ? 9 : 13,
+              fontWeight: 800,
+              textTransform: 'uppercase',
+              color: '#091a12',
               fontFamily: '"Cormorant Garamond", serif',
-              marginTop: isMobile ? '6px' : '12px'
+              marginTop: isMobile ? '6px' : '12px',
+              textShadow: '0px 1px 2px rgba(255,255,255,0.5)'
             }}
-            digitBlockStyle={{ 
-              width: isMobile ? 30 : 60, 
-              height: isMobile ? 45 : 85, 
-              fontSize: isMobile ? 24 : 45, 
-              backgroundColor: 'rgba(25, 65, 45, 0.7)', 
-              color: '#d4c896', 
-              boxShadow: '0 4px 15px rgba(0,0,0,0.4)', 
-              fontFamily: '"Cinzel Decorative", serif', 
-              borderRadius: isMobile ? '4px' : '8px' 
+            digitBlockStyle={{
+              width: isMobile ? 30 : 60,
+              height: isMobile ? 45 : 85,
+              fontSize: isMobile ? 24 : 45,
+              backgroundColor: 'rgba(9, 26, 18, 0.85)',
+              color: '#d4c896',
+              boxShadow: '0 4px 15px rgba(0,0,0,0.6)',
+              fontFamily: '"Cinzel Decorative", serif',
+              borderRadius: isMobile ? '4px' : '8px',
+              border: '1px solid rgba(201, 168, 76, 0.3)'
             }}
-            dividerStyle={{ color: 'rgba(143, 212, 176, 0.2)', height: 1 }}
+            dividerStyle={{ color: 'rgba(201, 168, 76, 0.4)', height: 1 }}
             separatorStyle={{ color: '#d4c896', size: isMobile ? '3px' : '5px' }}
             duration={0.5}
             onComplete={() => setIsEventPassed(true)}
           />
         </div>
-
-        <Card className="mt-6 px-4 py-4 bg-primary/5 border border-primary/20 mx-auto">
-          <div className="text-center">
-            <h3 className="font-playfair text-lg font-bold text-foreground mb-1">
-              Una Celebración Especial
-            </h3>
-            <p className="text-foreground/80 text-sm leading-snug">
-              Únete a nosotros para celebrar la mayoría de edad de Sofía en una velada mágica 
-              inspirada en los bosques encantados. Una noche llena de sorpresas, alegría y momentos inolvidables.
-            </p>
-          </div>
-        </Card>
       </div>
     </section>
   )
