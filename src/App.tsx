@@ -10,7 +10,6 @@ const Ceremony = lazy(() => import('@/components/sections/Ceremony').then(m => (
 const EventDetails = lazy(() => import('@/components/sections/EventDetails').then(m => ({ default: m.EventDetails })))
 const RSVP = lazy(() => import('@/components/sections/RSVP').then(m => ({ default: m.RSVP })))
 const DressCode = lazy(() => import('@/components/sections/DressCode').then(m => ({ default: m.DressCode })))
-const PhotoGallery = lazy(() => import('@/components/sections/PhotoGallery').then(m => ({ default: m.PhotoGallery })))
 const GiftRegistry = lazy(() => import('@/components/sections/GiftRegistry').then(m => ({ default: m.GiftRegistry })))
 const ThankYou = lazy(() => import('@/components/sections/ThankYou').then(m => ({ default: m.ThankYou })))
 const Butterflies = lazy(() => import('@/components/effects/Butterflies').then(m => ({ default: m.Butterflies })))
@@ -41,7 +40,6 @@ function App() {
           <Suspense key="rsvp" fallback={<LazyFallback />}><RSVP /></Suspense>,
           <Suspense key="dresscode" fallback={<LazyFallback />}><DressCode /></Suspense>,
           <Suspense key="gifts" fallback={<LazyFallback />}><GiftRegistry /></Suspense>,
-          <Suspense key="gallery" fallback={<LazyFallback />}><PhotoGallery /></Suspense>,
           <Suspense key="thankyou" fallback={<LazyFallback />}><ThankYou /></Suspense>,
           <section key="final" style={{ width: '100%', height: '100vh' }}>
             <div className="book-message">

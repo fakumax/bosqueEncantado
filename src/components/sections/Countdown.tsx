@@ -53,14 +53,6 @@ export function Countdown() {
             alt="Cuenta Regresiva"
             className="book-message__img"
           />
-          <div 
-            className="absolute flex items-center justify-center w-full z-10"
-            style={{ top: '33%', left: '50%', transform: 'translate(-50%, -50%)' }}
-          >
-            <h2 className="font-playfair text-3xl font-bold text-[#c9a84c] drop-shadow-md text-center px-4">
-              ¡La celebración ha llegado!
-            </h2>
-          </div>
         </div>
       </section>
     )
@@ -77,7 +69,7 @@ export function Countdown() {
 
         <div 
           className="absolute flex justify-center items-center w-full z-10"
-          style={{ top: '33%', left: '50%', transform: 'translate(-50%, -50%)' }}
+          style={{ top: '38%', left: '50%', transform: 'translate(-50%, -50%)' }}
         >
           <FlipClockCountdown
             to={targetDate}

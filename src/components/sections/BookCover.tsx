@@ -1,7 +1,5 @@
 import { useEffect, useRef } from 'react'
 import gsap from 'gsap'
-import { Sparkle, Heart } from '@phosphor-icons/react'
-import { SparkleText } from '@/components/effects/SparkleText'
 
 const forestVideo = '/videos/forestStart.mp4'
 
@@ -92,14 +90,6 @@ export function BookMessage() {
         alt="Bosque"
         className="book-message__img"
       />
-      <div className="book-message__content">
-        <p className="book-message__line">
-          En un reino envuelto por la bruma de los sueños, una joven que caminaba entre árboles milenarios y susurros de magia. Al llegar su primavera número quince, el bosque encantado ha decidido abrir sus puertas doradas para revelar su mayor tesoro.
-        </p>
-        <p className="book-message__line book-message__line--gold">
-          ¡Bienvenidos a mis quince años!
-        </p>
-      </div>
     </div>
   )
 }
@@ -107,31 +97,12 @@ export function BookMessage() {
 /** Page 3: Sofía XV info */
 export function BookSofia() {
   return (
-    <div className="book-sofia">
-      <div className="book-sofia__bg" />
-      <div className="book-sofia__content">
-        <div className="flex items-center justify-center gap-3 mb-6">
-          <Sparkle size={28} weight="fill" className="text-accent animate-float" />
-          <Heart size={20} weight="fill" className="text-primary/60" />
-          <Sparkle size={28} weight="fill" className="text-accent animate-float" />
-        </div>
-
-        <div className="mb-4">
-          <SparkleText text="Sofía" />
-        </div>
-
-        <div className="space-y-2 mb-8 max-w-md mx-auto px-4">
-          <p className="text-lg md:text-xl text-foreground/90 font-medium leading-relaxed text-center">
-            Sigue el rastro de polvo de hadas y acompáñame a celebrar el inicio de mi propia aventura en este bosque encantado
-          </p>
-        </div>
-
-        <div className="inline-block bg-accent/15 border border-accent/40 rounded-full px-8 py-3 backdrop-blur-sm">
-          <p className="text-accent font-semibold text-lg tracking-wide">
-            6 de Junio, 2026
-          </p>
-        </div>
-      </div>
+    <div className="book-message">
+      <img
+        src="/img/3-invitacion/3.png"
+        alt="Invitación"
+        className="book-message__img"
+      />
     </div>
   )
 }

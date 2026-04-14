@@ -38,5 +38,4 @@ El libro interactivo se compone de las siguientes pantallas en este orden cronol
 7. **RSVP (Confirmación)**: Formulario interactivo o contacto de WhatsApp donde los invitados confirman su asistencia.
 8. **DressCode (Vestimenta)**: Tarjeta detallando "Formal y Elegante", resaltando que se reserva el color verde para la cumpleañera.
 9. **GiftRegistry (Mesa de Regalos)**: Sección con datos bancarios o información sobre la modalidad de obsequios (lluvia de sobres).
-10. **PhotoGallery (Galería)**: Collage de fotos o carrusel con la sesión fotográfica de la quinceañera.
-11. **ThankYou (Despedida)**: Pantalla de cierre con destellos y un mensaje final de cariño.
+10. **ThankYou (Despedida)**: Pantalla de cierre con destellos y un mensaje final de cariño.
