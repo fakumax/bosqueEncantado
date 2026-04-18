@@ -1,41 +1,56 @@
 # Bosque Encantado - Invitación XV Años Sofía
 
-Invitación digital interactiva para los XV años de Sofía, con temática de bosque encantado.
+Invitación digital interactiva para los XV años de Sofía, con temática de bosque encantado. Funciona como un libro animado con páginas que se pasan.
 
 ## Tech Stack
 
 - React 19 + TypeScript
 - Vite 8
-- Tailwind CSS 4
-- Framer Motion
-- SCSS
-- Radix UI + Phosphor Icons
+- Tailwind CSS 4 + SCSS
+- shadcn/ui + Radix UI
+- Phosphor Icons
+- GSAP + page-flip
 
-## Desarrollo
-
-```bash
-pnpm install
-pnpm dev
-```
-
-## Build
+## Comandos
 
 ```bash
-pnpm build
-pnpm preview
+pnpm install   # instalar dependencias
+pnpm dev       # servidor de desarrollo
+pnpm build     # build de producción
+pnpm preview   # previsualizar el build
 ```
 
-## Estructura de Pantallas (Páginas)
+## Estructura de Páginas
 
-El libro interactivo se compone de las siguientes pantallas en este orden cronológico (ubicadas en `src/components/sections/` y `src/App.tsx`):
+El libro interactivo tiene las siguientes páginas en orden. Los componentes viven en `src/components/sections/` salvo los primeros tres que están en `BookCover.tsx`.
 
-1. **BookCover (Introducción)**: Video de bosque de fondo con la animación del texto "Érase una vez...".
-2. **BookMessage (El Cuento)**: Imagen estática del bosque junto al prólogo de la historia ("En un reino envuelto por la bruma...").
-3. **BookSofia (Portada Principal)**: Nombre de la quinceañera animado con destellos, texto de invitación temático ("Sigue el rastro de polvo de hadas...") y fecha del gran día.
-4. **Ceremony (Ceremonia)**: Información de la misa: nombre de la iglesia, dirección, horario y botón de Google Maps para saber cómo llegar.
-5. **Countdown (Cuenta Regresiva)**: Temporizador con los días, horas, minutos y segundos que faltan para el evento.
-6. **EventDetails (Detalles y Ubicación)**: Información de fecha, hora, lugar del salón, dirección y un botón interactivo de "Cómo llegar" al salón de fiesta.
-7. **RSVP (Confirmación)**: Formulario interactivo o contacto de WhatsApp donde los invitados confirman su asistencia.
-8. **DressCode (Vestimenta)**: Tarjeta detallando "Formal y Elegante", resaltando que se reserva el color verde para la cumpleañera.
-9. **GiftRegistry (Mesa de Regalos)**: Sección con datos bancarios o información sobre la modalidad de obsequios (lluvia de sobres).
-10. **ThankYou (Despedida)**: Pantalla de cierre con destellos y un mensaje final de cariño.
+| # | Componente | Descripción |
+|---|---|---|
+| 1 | `BookCover` | Video de bosque con animación "Érase una vez…" |
+| 2 | `BookMessage` | Prólogo de la historia sobre imagen del bosque |
+| 3 | `BookSofia` | Nombre de Sofía animado, texto de invitación y fecha |
+| 4 | `Ceremony` | Datos de la misa: iglesia, dirección, horario y link a Maps |
+| 5 | `Countdown` | Temporizador de cuenta regresiva al evento |
+| 6 | `EventDetails` | Fecha, hora, salón y link de cómo llegar |
+| 7 | `RSVP` | Confirmación de asistencia por WhatsApp |
+| 8 | `DressCode` | Dress code (Formal y Elegante) + datos de mesa de regalos |
+| 9 | `ThankYou` | Mensaje de cierre con destellos |
+| 10 | *(inline en App.tsx)* | Página final con imagen de cierre |
+
+## Imágenes
+
+Las imágenes de fondo de cada página están en `public/img/` organizadas por número de sección:
+
+```
+public/img/
+  1-video/
+  2-cuento/
+  3-invitacion/
+  4-ceremonia/
+  5-cuenta-regresiva/
+  6-detalles/
+  7-confirmacion/
+  8-vestimentaRegalo/   ← dress code + regalos en una sola página
+  9-despedida/
+  10-final/
+```

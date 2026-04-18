@@ -29,7 +29,7 @@ export function ThankYou() {
     <section ref={sectionRef} id="despedida" style={{ width: '100%', height: '100vh' }}>
       <div className="book-message">
         <img
-          src="/img/11-despedida/11.png"
+          src="/img/9-despedida/9.png"
           alt="Despedida"
           className="book-message__img"
         />
