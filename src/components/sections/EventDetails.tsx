@@ -39,7 +39,7 @@ export function EventDetails() {
         {/* Botón interactivo sobre la imagen, posicionado un poco más arriba de la mitad */}
         <div
           className="absolute flex items-center justify-center w-full z-10"
-          style={{ top: '50%', left: '50%', transform: 'translate(-50%, -50%)' }}
+          style={{ top: '46%', left: '50%', transform: 'translate(-50%, -50%)' }}
         >
           <a
             href={mapsUrl}

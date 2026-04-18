@@ -88,7 +88,7 @@ export function DressCode() {
               Tu presencia es el mejor regalo, pero si deseas hacernos llegar un obsequio,
               aquí te compartimos nuestros datos
             </p>
-            <Card className="px-4 pt-3 pb-2 bg-[#091a12]/95 border-[#c9a84c]/40 rounded-xl">
+            <Card className="px-4 pt-3 pb-2 gap-1 bg-[#091a12]/95 border-[#c9a84c]/40 rounded-xl">
               <div className="flex items-center gap-1.5 mb-0">
                 <div className="p-1 bg-[#c9a84c]/20 rounded-full shrink-0">
                   <Gift size={14} weight="duotone" className="text-[#c9a84c]" />
