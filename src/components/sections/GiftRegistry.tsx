@@ -83,7 +83,7 @@ export function GiftRegistry() {
             return (
               <Card
                 key={method.name}
-                className="px-4 py-4 bg-card/90 backdrop-blur"
+                className="px-4 py-4 bg-card"
               >
                 <div className="flex items-center gap-3">
                   <div className="p-2 bg-accent/20 rounded-full shrink-0">

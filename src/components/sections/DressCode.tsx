@@ -70,7 +70,7 @@ export function DressCode() {
           className="absolute z-10 w-full px-4 max-w-[320px]"
           style={{ top: '45%', left: '50%', transform: 'translate(-50%, -50%)' }}
         >
-          <div className="p-3 bg-[#091a12]/85 border border-[#c9a84c]/30 backdrop-blur-md rounded-xl">
+          <div className="p-3 bg-[#091a12]/95 border border-[#c9a84c]/30 rounded-xl">
             <p className="text-[#8BA995] text-sm leading-relaxed text-center">
               Para mantener la magia de la noche, se reserva el{' '}
               <span className="font-bold text-[#c9a84c] tracking-wide uppercase">color verde</span> para la cumpleañera.
@@ -88,7 +88,7 @@ export function DressCode() {
               Tu presencia es el mejor regalo, pero si deseas hacernos llegar un obsequio,
               aquí te compartimos nuestros datos
             </p>
-            <Card className="px-4 pt-3 pb-2 bg-[#091a12]/85 border-[#c9a84c]/40 backdrop-blur-md rounded-xl">
+            <Card className="px-4 pt-3 pb-2 bg-[#091a12]/95 border-[#c9a84c]/40 rounded-xl">
               <div className="flex items-center gap-1.5 mb-0">
                 <div className="p-1 bg-[#c9a84c]/20 rounded-full shrink-0">
                   <Gift size={14} weight="duotone" className="text-[#c9a84c]" />

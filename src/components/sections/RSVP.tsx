@@ -103,7 +103,7 @@ export function RSVP() {
             </p>
           </div>
 
-          <Card className="px-5 py-5 bg-[#091a12]/85 backdrop-blur-md border border-[#c9a84c]/40 rounded-2xl shadow-2xl">
+          <Card className="px-5 py-5 bg-[#091a12]/95 border border-[#c9a84c]/40 rounded-2xl shadow-2xl">
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
                 <Input

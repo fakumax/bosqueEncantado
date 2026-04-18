@@ -45,7 +45,7 @@ export function Ceremony() {
           className="absolute z-10 w-full px-4 max-w-[340px]"
           style={{ bottom: '30%', left: '50%', transform: 'translateX(-50%)' }}
         >
-          <Card className="p-6 bg-[#091a12]/80 border-accent/20 backdrop-blur shadow-2xl relative overflow-hidden rounded-2xl w-full">
+          <Card className="p-6 bg-[#091a12]/95 border-accent/20 shadow-2xl relative overflow-hidden rounded-2xl w-full">
             <div className="absolute inset-0 bg-[url('/img/magic-dust.png')] opacity-10 mix-blend-screen pointer-events-none" />
             
             <div className="relative z-10 text-center flex flex-col items-center">

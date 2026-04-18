@@ -46,7 +46,7 @@ export function Location() {
         </div>
 
         <div className="max-w-3xl mx-auto">
-          <Card className="p-8 md:p-10 bg-card/90 backdrop-blur">
+          <Card className="p-8 md:p-10 bg-card">
             <h3 className="font-playfair text-2xl font-bold text-foreground mb-4">
               {venueName}
             </h3>

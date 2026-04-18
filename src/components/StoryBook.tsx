@@ -1,88 +1,81 @@
-import { useRef, useEffect, useCallback, type ReactElement } from 'react'
-import { PageFlip } from 'page-flip'
+import {
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+  type ReactElement,
+} from 'react'
+import { animate, motion, useMotionValue } from 'framer-motion'
 
 interface StoryBookProps {
   children: ReactElement[]
 }
 
+const FLIP_DURATION_S = 0.75
+const COOLDOWN_MS = 850
+const SWIPE_MIN_PX = 50
+const WHEEL_MIN_PX = 15
+
+type FlipState = {
+  flippingIndex: number
+  underneathIndex: number
+  targetIndex: number
+  dir: 'next' | 'prev'
+}
+
 export function StoryBook({ children }: StoryBookProps) {
   const containerRef = useRef<HTMLDivElement>(null)
-  const bookRef = useRef<HTMLDivElement>(null)
-  const pageFlipRef = useRef<PageFlip | null>(null)
+  const [displayIndex, setDisplayIndex] = useState(0)
+  const [flipping, setFlipping] = useState<FlipState | null>(null)
+  const flipAngle = useMotionValue(0)
+  const isAnimatingRef = useRef(false)
+  const lastFlipTime = useRef(0)
 
-  const initPageFlip = useCallback(() => {
-    if (!bookRef.current) return
+  const tryFlip = useCallback(
+    (dir: 'next' | 'prev') => {
+      if (isAnimatingRef.current) return
+      const now = Date.now()
+      if (now - lastFlipTime.current < COOLDOWN_MS) return
 
-    // Guardar la página actual antes de destruir
-    const currentPage = pageFlipRef.current?.getCurrentPageIndex() ?? 0
+      const target = dir === 'next' ? displayIndex + 1 : displayIndex - 1
+      if (target < 0 || target >= children.length) return
 
-    if (pageFlipRef.current) {
-      pageFlipRef.current.destroy()
-      pageFlipRef.current = null
-    }
+      lastFlipTime.current = now
+      isAnimatingRef.current = true
 
-    // Usar dimensiones exactas del viewport → cada página = pantalla completa.
-    // Con size:'fixed', la librería NO puede escalar y meter 2 páginas lado a lado
-    // porque 2 × viewportWidth > viewportWidth → fuerza modo portrait siempre.
-    const w = window.innerWidth
-    const h = window.innerHeight
+      const flippingIndex = dir === 'next' ? displayIndex : target
+      const underneathIndex = dir === 'next' ? target : displayIndex
+      const fromAngle = dir === 'next' ? 0 : -180
+      const toAngle = dir === 'next' ? -180 : 0
 
-    pageFlipRef.current = new PageFlip(bookRef.current, {
-      width: w,
-      height: h,
-      size: 'fixed',
-      maxShadowOpacity: 0,
-      showCover: true,
-      mobileScrollSupport: false,
-      usePortrait: true,
-      flippingTime: 700,
-      drawShadow: false,
-      startZIndex: 0,
-      autoSize: false,
-    })
+      flipAngle.set(fromAngle)
+      setFlipping({ flippingIndex, underneathIndex, targetIndex: target, dir })
 
-    const pages = bookRef.current.querySelectorAll('.story-page')
-    if (pages.length > 0) {
-      pageFlipRef.current.loadFromHTML(Array.from(pages) as HTMLElement[])
-      if (currentPage > 0) {
-        pageFlipRef.current.turnToPage(currentPage)
-      }
-    }
-  }, [])
+      animate(flipAngle, toAngle, {
+        duration: FLIP_DURATION_S,
+        ease: [0.42, 0, 0.4, 1],
+        onComplete: () => {
+          setDisplayIndex(target)
+          setFlipping(null)
+          isAnimatingRef.current = false
+        },
+      })
+    },
+    [children.length, displayIndex, flipAngle],
+  )
 
   useEffect(() => {
-    initPageFlip()
+    const c = containerRef.current
+    if (!c) return
 
-    const handleResize = () => initPageFlip()
-    window.addEventListener('resize', handleResize)
-
-    // ── Scroll / swipe vertical → cambiar página ──
-    let lastFlipTime = 0
-    const FLIP_COOLDOWN = 800 // ms — evita saltar múltiples páginas de golpe
-
-    const tryFlip = (direction: 'next' | 'prev') => {
-      const now = Date.now()
-      if (now - lastFlipTime < FLIP_COOLDOWN) return
-      if (!pageFlipRef.current) return
-      lastFlipTime = now
-
-      if (direction === 'next') {
-        pageFlipRef.current.flipNext('top')
-      } else {
-        pageFlipRef.current.flipPrev('top')
-      }
-    }
-
-    // Mouse wheel
-    const handleWheel = (e: WheelEvent) => {
-      e.preventDefault()
-      if (Math.abs(e.deltaY) < 15) return // ignore tiny scroll jitter
-      tryFlip(e.deltaY > 0 ? 'next' : 'prev')
-    }
-
-    // Touch vertical swipe
     let touchStartY = 0
     let touchStartX = 0
+
+    const handleWheel = (e: WheelEvent) => {
+      e.preventDefault()
+      if (Math.abs(e.deltaY) < WHEEL_MIN_PX) return
+      tryFlip(e.deltaY > 0 ? 'next' : 'prev')
+    }
 
     const handleTouchStart = (e: TouchEvent) => {
       touchStartY = e.touches[0].clientY
@@ -92,71 +85,76 @@ export function StoryBook({ children }: StoryBookProps) {
     const handleTouchEnd = (e: TouchEvent) => {
       const dy = touchStartY - e.changedTouches[0].clientY
       const dx = Math.abs(touchStartX - e.changedTouches[0].clientX)
-      // Solo activar si el swipe es más vertical que horizontal y tiene recorrido suficiente
-      if (Math.abs(dy) > 50 && Math.abs(dy) > dx) {
+      if (Math.abs(dy) > SWIPE_MIN_PX && Math.abs(dy) > dx) {
         tryFlip(dy > 0 ? 'next' : 'prev')
       }
     }
 
-    const container = containerRef.current
-    if (container) {
-      container.addEventListener('wheel', handleWheel, { passive: false })
-      container.addEventListener('touchstart', handleTouchStart, { passive: true })
-      container.addEventListener('touchend', handleTouchEnd, { passive: true })
-    }
+    c.addEventListener('wheel', handleWheel, { passive: false })
+    c.addEventListener('touchstart', handleTouchStart, { passive: true })
+    c.addEventListener('touchend', handleTouchEnd, { passive: true })
 
     return () => {
-      window.removeEventListener('resize', handleResize)
-      if (container) {
-        container.removeEventListener('wheel', handleWheel)
-        container.removeEventListener('touchstart', handleTouchStart)
-        container.removeEventListener('touchend', handleTouchEnd)
-      }
-      if (pageFlipRef.current) {
-        pageFlipRef.current.destroy()
-        pageFlipRef.current = null
-      }
+      c.removeEventListener('wheel', handleWheel)
+      c.removeEventListener('touchstart', handleTouchStart)
+      c.removeEventListener('touchend', handleTouchEnd)
     }
-  }, [children, initPageFlip])
+  }, [tryFlip])
 
   return (
-    // Contenedor principal fijado al viewport completo sin importar el browser chrome
-    <div 
-      ref={containerRef} 
+    <div
+      ref={containerRef}
       className="fixed inset-0 overflow-hidden touch-none"
-      style={{ backgroundColor: '#091a12' }}
+      style={{
+        backgroundColor: '#091a12',
+        perspective: '2200px',
+      }}
     >
-      {/* Contenedor del libro estirado al 100% */}
-      <div ref={bookRef} className="w-full h-full">
-        {children.map((child, index) => {
-          const isHard = index === 0 || index === children.length - 1
-          
-          return (
-             <div 
-               key={index} 
-               className="story-page relative overflow-hidden"
-               data-density={isHard ? 'hard' : 'soft'}
-             >
-               {/* Fondo dorado — visible como reverso de la página al dar vuelta */}
-               <div 
-                 className="absolute inset-0" 
-                 style={{ 
-                   background: 'linear-gradient(160deg, #8b6914 0%, #c9a84c 20%, #f5d98a 45%, #e8c860 55%, #c9a84c 75%, #8b6914 100%)',
-                   zIndex: 0 
-                 }} 
-               />
-               {/* Contenido de la página encima del dorado */}
-               <div className="absolute inset-0" style={{ 
-                  backgroundColor: '#091a12',
-                  zIndex: 1,
-                  boxShadow: 'inset 0 0 30px rgba(0,0,0,0.6)' 
-               }}>
-                 {child}
-               </div>
-             </div>
-          )
-        })}
-      </div>
+      {children.map((child, i) => {
+        const isCurrent = !flipping && i === displayIndex
+        const isFlipping = flipping?.flippingIndex === i
+        const isUnderneath = flipping?.underneathIndex === i
+        const visible = isCurrent || isFlipping || isUnderneath
+
+        return (
+          <motion.div
+            key={i}
+            className="absolute inset-0"
+            style={{
+              visibility: visible ? 'visible' : 'hidden',
+              zIndex: isFlipping ? 10 : 1,
+              transformStyle: 'preserve-3d',
+              transformOrigin: 'left center',
+              backfaceVisibility: 'visible',
+              rotateY: isFlipping ? flipAngle : 0,
+              willChange: isFlipping ? 'transform' : undefined,
+            }}
+          >
+            <div
+              className="absolute inset-0 overflow-hidden"
+              style={{
+                backfaceVisibility: 'hidden',
+                WebkitBackfaceVisibility: 'hidden',
+                backgroundColor: '#091a12',
+                boxShadow: 'inset 0 0 30px rgba(0,0,0,0.6)',
+              }}
+            >
+              {child}
+            </div>
+
+            <div
+              className="absolute inset-0"
+              style={{
+                backfaceVisibility: 'hidden',
+                WebkitBackfaceVisibility: 'hidden',
+                transform: 'rotateY(180deg)',
+                background:
+                  'linear-gradient(160deg, #8b6914 0%, #c9a84c 20%, #f5d98a 45%, #e8c860 55%, #c9a84c 75%, #8b6914 100%)',
+              }}
+            />
+          </motion.div>
+        )
+      })}
     </div>
   )
 }

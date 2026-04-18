@@ -416,7 +416,7 @@ export function Hero() {
               </p>
             </div>
 
-            <div className="inline-block bg-accent/15 border border-accent/40 rounded-full px-8 py-3 backdrop-blur-sm">
+            <div className="inline-block bg-accent/15 border border-accent/40 rounded-full px-8 py-3">
               <p className="text-accent font-semibold text-lg tracking-wide">
                 6 de Junio, 2026
               </p>
