@@ -155,7 +155,7 @@ export function StoryBook({ children }: StoryBookProps) {
               overflow: 'hidden',
               transform: `translate(-50%, -50%) scale(${scale})`,
               transformOrigin: 'center center',
-              visibility: visible ? 'visible' : 'hidden',
+              display: visible ? 'block' : 'none',
               zIndex: isFlipping ? 10 : 1,
             }}
           >
