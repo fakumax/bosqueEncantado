@@ -32,7 +32,7 @@ export function Ceremony() {
   const mapsUrl = 'https://maps.google.com/' // Cambiar al link real
 
   return (
-    <section ref={sectionRef} id="ceremonia" style={{ width: '100%', height: '100vh' }}>
+    <section ref={sectionRef} id="ceremonia" style={{ width: '100%', height: '100%' }}>
       <div className="book-message relative w-full h-full">
         <img
           src="/img/4-ceremonia/4.png"

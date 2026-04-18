@@ -47,7 +47,7 @@ export function DressCode() {
   }
 
   return (
-    <section ref={sectionRef} id="dresscode" style={{ width: '100%', height: '100vh' }}>
+    <section ref={sectionRef} id="dresscode" style={{ width: '100%', height: '100%' }}>
       <div className="book-message relative w-full h-full">
         <img
           src="/img/8-vestimentaRegalo/8.png"

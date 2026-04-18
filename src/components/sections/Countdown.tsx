@@ -46,7 +46,7 @@ export function Countdown() {
 
   if (isEventPassed) {
     return (
-      <section ref={sectionRef} id="countdown" style={{ width: '100%', height: '100vh' }}>
+      <section ref={sectionRef} id="countdown" style={{ width: '100%', height: '100%' }}>
         <div className="book-message">
           <img
             src="/img/5-cuenta-regresiva/5.png"
@@ -59,7 +59,7 @@ export function Countdown() {
   }
 
   return (
-    <section ref={sectionRef} id="countdown" style={{ width: '100%', height: '100vh' }}>
+    <section ref={sectionRef} id="countdown" style={{ width: '100%', height: '100%' }}>
       <div className="book-message">
         <img
           src="/img/5-cuenta-regresiva/5.png"

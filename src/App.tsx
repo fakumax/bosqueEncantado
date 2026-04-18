@@ -39,7 +39,7 @@ function App() {
           <Suspense key="rsvp" fallback={<LazyFallback />}><RSVP /></Suspense>,
           <Suspense key="dresscode" fallback={<LazyFallback />}><DressCode /></Suspense>,
           <Suspense key="thankyou" fallback={<LazyFallback />}><ThankYou /></Suspense>,
-          <section key="final" style={{ width: '100%', height: '100vh' }}>
+          <section key="final" style={{ width: '100%', height: '100%' }}>
             <div className="book-message">
               <img
                 src="/img/10-final/10.png"

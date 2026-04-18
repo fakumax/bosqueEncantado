@@ -28,7 +28,7 @@ export function EventDetails() {
   const mapsUrl = 'https://www.google.com/maps/place/Espacio+Recreativo+IPLyC/@-27.3663442,-55.9393798,17z/data=!3m1!4b1!4m6!3m5!1s0x9457bdfef28b1ac5:0x3ac4b81af4a2672!8m2!3d-27.3663442!4d-55.9393798!16s%2Fg%2F11d_7sw5f4'
 
   return (
-    <section ref={sectionRef} id="detalles" style={{ width: '100%', height: '100vh' }}>
+    <section ref={sectionRef} id="detalles" style={{ width: '100%', height: '100%' }}>
       <div className="book-message">
         <img
           src="/img/6-detalles/6.png"
