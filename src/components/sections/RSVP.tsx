@@ -5,25 +5,15 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
-import { EnvelopeSimple, Check } from '@phosphor-icons/react'
+import { Check } from '@phosphor-icons/react'
 import { toast } from 'sonner'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 
 gsap.registerPlugin(ScrollTrigger)
 
-interface RSVPEntry {
-  id: string
-  name: string
-  attending: string
-  guests: string
-  message: string
-  timestamp: number
-}
-
 export function RSVP() {
   const sectionRef = useRef<HTMLElement>(null)
-  const [rsvps, setRsvps] = useState<RSVPEntry[]>([])
   const [name, setName] = useState('')
   const [attending, setAttending] = useState('si')
   const [guests, setGuests] = useState('1')
@@ -47,6 +37,8 @@ export function RSVP() {
     return () => ctx.revert()
   }, [])
 
+  const GOOGLE_FORM_URL = 'https://docs.google.com/forms/d/e/1FAIpQLSdscPpHPmaqIU2xejar9qZsT93EysXlDKwEGXfHm79UadDGnQ/formResponse'
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
 
@@ -57,27 +49,34 @@ export function RSVP() {
 
     setIsSubmitting(true)
 
-    const newRsvp: RSVPEntry = {
-      id: Date.now().toString(),
-      name: name.trim(),
-      attending,
-      guests,
-      message: message.trim(),
-      timestamp: Date.now(),
+    try {
+      const formData = new URLSearchParams()
+      formData.append('entry.1490533021', name.trim())
+      formData.append('entry.2045038163', attending === 'si' ? 'Si' : 'No')
+      formData.append('entry.452084798', attending === 'si' ? guests : '0')
+      formData.append('entry.1196307146', message.trim())
+
+      await fetch(GOOGLE_FORM_URL, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: formData.toString(),
+      })
+
+      toast.success(attending === 'si'
+        ? '¡Gracias por confirmar tu asistencia!'
+        : 'Gracias por tu respuesta. ¡Te echaremos de menos!'
+      )
+
+      setName('')
+      setAttending('si')
+      setGuests('1')
+      setMessage('')
+    } catch {
+      toast.error('Error al enviar. Intentá de nuevo.')
+    } finally {
+      setIsSubmitting(false)
     }
-
-    setRsvps(currentRsvps => [...currentRsvps, newRsvp])
-
-    toast.success(attending === 'si'
-      ? '¡Gracias por confirmar tu asistencia!'
-      : 'Gracias por tu respuesta. ¡Te echaremos de menos!'
-    )
-
-    setName('')
-    setAttending('si')
-    setGuests('1')
-    setMessage('')
-    setIsSubmitting(false)
   }
 
   return (
@@ -178,13 +177,7 @@ export function RSVP() {
             </form>
           </Card>
 
-          {rsvps.length > 0 && (
-            <div className="mt-3 text-center text-[#133221]">
-              <p className="text-xs font-bold drop-shadow-sm">
-                {rsvps.filter(r => r.attending === 'si').length} persona(s) han confirmado su asistencia
-              </p>
-            </div>
-          )}
+
         </div>
       </div>
     </section>
