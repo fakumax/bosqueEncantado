@@ -1,21 +1,11 @@
-import { useState, useEffect, useRef } from 'react'
-import { Card } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
-import { Copy, Check } from '@phosphor-icons/react'
-import { toast } from 'sonner'
+import { useEffect, useRef } from 'react'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 
 gsap.registerPlugin(ScrollTrigger)
 
-const mpFields = [
-  { label: 'Alias', value: 'soffirobledo' },
-  { label: 'Nombre', value: 'Sofía Denise Robledo' },
-]
-
 export function DressCode() {
   const sectionRef = useRef<HTMLElement>(null)
-  const [copiedField, setCopiedField] = useState<string | null>(null)
 
 
   useEffect(() => {
@@ -34,17 +24,6 @@ export function DressCode() {
     }, sectionRef)
     return () => ctx.revert()
   }, [])
-
-  const copyToClipboard = async (text: string, label: string) => {
-    try {
-      await navigator.clipboard.writeText(text)
-      setCopiedField(label)
-      toast.success('¡Copiado al portapapeles!')
-      setTimeout(() => setCopiedField(null), 2000)
-    } catch {
-      toast.error('Error al copiar')
-    }
-  }
 
   return (
     <section ref={sectionRef} id="dresscode" style={{ width: '100%', height: '100%' }}>
