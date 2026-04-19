@@ -55,44 +55,6 @@ export function DressCode() {
           className="book-message__img absolute inset-0 w-full h-full object-cover z-0"
         />
 
-        {/* Regalos — mitad inferior */}
-        <div
-          className="absolute z-10 w-full px-4 max-w-[320px]"
-          style={{ top: 'calc(45% + 200px)', left: '50%', transform: 'translateX(-50%)' }}
-        >
-          <div className="flex flex-col gap-2">
-            <p className="text-center text-xs text-[#3b2a0e] leading-snug mb-1">
-              Tu presencia es el mejor regalo, pero si deseas hacernos llegar un obsequio,
-              aquí te compartimos nuestros datos
-            </p>
-            <Card className="px-4 pt-3 pb-2 gap-1 bg-[#091a12]/95 border-[#c9a84c]/40 rounded-xl">
-              <div className="flex flex-col gap-1">
-                {mpFields.map((field) => {
-                  const isCopied = copiedField === field.label
-                  return (
-                    <div key={field.label} className="flex items-center justify-between gap-1">
-                      <div className="min-w-0">
-                        <span className="text-[9px] text-[#c9a84c] uppercase tracking-wide font-semibold mr-1">{field.label}:</span>
-                        <span className="text-[11px] text-[#8BA995] font-mono">{field.value}</span>
-                      </div>
-                      <Button
-                        onClick={() => copyToClipboard(field.value, field.label)}
-                        className="bg-[#c9a84c] hover:bg-[#c9a84c]/80 text-[#091a12] shrink-0 h-6 px-1.5 text-[10px]"
-                        size="sm"
-                      >
-                        {isCopied ? (
-                          <><Check size={10} weight="bold" className="mr-0.5" />Copiado</>
-                        ) : (
-                          <><Copy size={10} weight="bold" className="mr-0.5" />Copiar</>
-                        )}
-                      </Button>
-                    </div>
-                  )
-                })}
-              </div>
-            </Card>
-          </div>
-        </div>
       </div>
     </section>
   )
