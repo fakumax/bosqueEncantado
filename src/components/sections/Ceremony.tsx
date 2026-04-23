@@ -1,6 +1,4 @@
 import { useEffect, useRef } from 'react'
-import { Card } from '@/components/ui/card'
-import { MapPin, NavigationArrow, Clock } from '@phosphor-icons/react'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 
@@ -26,9 +24,6 @@ export function Ceremony() {
     return () => ctx.revert()
   }, [])
 
-  const churchName = 'Parroquia San Miguel Arcángel' // Cambiar al nombre de la iglesia real
-  const address = 'Dirección de la iglesia, Ciudad, Provincia' // Cambiar a dirección real
-  const time = '20:00 hs' // Cambiar al horario real
   const mapsUrl = 'https://maps.google.com/' // Cambiar al link real
 
   return (
@@ -41,51 +36,26 @@ export function Ceremony() {
         />
 
         {/* Contenido colocado sobre la imagen */}
-        <div 
-          className="absolute z-10 w-full px-4 max-w-[340px]"
-          style={{ bottom: '30%', left: '50%', transform: 'translateX(-50%)' }}
+        <div
+          className="absolute z-10"
+          style={{ bottom: '61%', left: '50%', transform: 'translate(-50%, 50%)' }}
         >
-          <Card className="p-6 bg-[#091a12]/95 border-accent/20 shadow-2xl relative overflow-hidden rounded-2xl w-full">
-            <div className="absolute inset-0 bg-[url('/img/magic-dust.png')] opacity-10 mix-blend-screen pointer-events-none" />
-            
-            <div className="relative z-10 text-center flex flex-col items-center">
-              <h3 className="font-playfair text-xl font-bold text-accent mb-4 uppercase tracking-wider">
-                {churchName}
-              </h3>
-              
-              <div className="flex flex-col gap-4 w-full mb-6">
-                <div className="flex items-center gap-3 text-left">
-                  <div className="bg-accent/10 p-2 rounded-full flex-shrink-0 border border-accent/20">
-                    <Clock size={20} weight="fill" className="text-accent" />
-                  </div>
-                  <div>
-                    <p className="font-bold text-white text-sm">Horario</p>
-                    <p className="text-accent/90 text-sm">{time}</p>
-                  </div>
-                </div>
-
-                <div className="flex items-center gap-3 text-left">
-                  <div className="bg-accent/10 p-2 rounded-full flex-shrink-0 border border-accent/20">
-                    <MapPin size={20} weight="fill" className="text-accent" />
-                  </div>
-                  <div>
-                    <p className="font-bold text-white text-sm">Ubicación</p>
-                    <p className="text-accent/90 text-sm">{address}</p>
-                  </div>
-                </div>
-              </div>
-
-              <a
-                href={mapsUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="bg-[#091a12] text-white shadow-[0_4px_15px_rgba(0,0,0,0.6)] border-2 border-[#c9a84c] px-6 py-2 rounded-full font-bold hover:bg-[#133221] transition-all uppercase tracking-widest text-xs flex items-center justify-center gap-2 hover:scale-105 hover:shadow-[0_0_20px_rgba(201,168,76,0.5)] w-full"
-              >
-                <MapPin size={18} weight="fill" color="#c9a84c" />
-                CÓMO LLEGAR
-              </a>
-            </div>
-          </Card>
+          <a
+            href={mapsUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Cómo llegar"
+            className="group inline-block transition-transform duration-300 hover:scale-105"
+          >
+            <picture>
+              <source srcSet="/img/botonComollegar.webp" type="image/webp" />
+              <img
+                src="/img/botonComollegar.png"
+                alt=""
+                className="block h-auto w-[210px] max-w-full drop-shadow-[0_4px_15px_rgba(0,0,0,0.35)] transition-[filter] duration-300 group-hover:drop-shadow-[0_0_18px_rgba(201,168,76,0.45)]"
+              />
+            </picture>
+          </a>
         </div>
       </div>
     </section>

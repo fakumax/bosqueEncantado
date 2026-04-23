@@ -1,5 +1,4 @@
 import { useEffect, useRef } from 'react'
-import { MapPin } from '@phosphor-icons/react'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 
@@ -38,17 +37,24 @@ export function EventDetails() {
 
         {/* Botón interactivo sobre la imagen, posicionado un poco más arriba de la mitad */}
         <div
-          className="absolute flex items-center justify-center w-full z-10"
+          className="absolute z-10"
           style={{ top: '46%', left: '50%', transform: 'translate(-50%, -50%)' }}
         >
           <a
             href={mapsUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="bg-[#091a12] text-white shadow-[0_4px_15px_rgba(0,0,0,0.6)] border-2 border-[#c9a84c] px-7 py-2.5 rounded-full font-bold hover:bg-[#133221] transition-all uppercase tracking-widest text-xs flex items-center gap-2 hover:scale-105 hover:shadow-[0_0_20px_rgba(201,168,76,0.5)]"
+            aria-label="Cómo llegar"
+            className="group inline-block transition-transform duration-300 hover:scale-105"
           >
-            <MapPin size={18} weight="fill" color="#c9a84c" />
-            CÓMO LLEGAR
+            <picture>
+              <source srcSet="/img/botonComollegar.webp" type="image/webp" />
+              <img
+                src="/img/botonComollegar.png"
+                alt=""
+                className="block h-auto w-[210px] max-w-full drop-shadow-[0_4px_15px_rgba(0,0,0,0.35)] transition-[filter] duration-300 group-hover:drop-shadow-[0_0_18px_rgba(201,168,76,0.45)]"
+              />
+            </picture>
           </a>
         </div>
         </div>

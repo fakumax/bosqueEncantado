@@ -68,10 +68,38 @@ export function Countdown() {
         />
 
         <div 
-          className="absolute flex justify-center items-center w-full z-10"
-          style={{ top: '38%', left: '50%', transform: 'translate(-50%, -50%)' }}
+          className="absolute flex justify-center items-center z-10"
+          style={{ top: '50%', left: '42%', transform: 'translate(-50%, -50%)' }}
         >
+          <style>{`
+            .compact-countdown { gap: 0 !important; }
+            .compact-countdown .fcc__unit_time { 
+              display: grid !important;
+              grid-template-columns: auto auto !important;
+              column-gap: 2px !important;
+              row-gap: 0 !important;
+              align-items: center !important;
+              justify-content: center !important;
+              margin-bottom: -40px !important;
+            }
+            .compact-countdown .fcc__label { 
+              position: static !important;
+              transform: none !important;
+              grid-column: 1 / -1 !important;
+              grid-row: 2 !important;
+              text-align: center !important;
+              order: 2 !important;
+              margin-top: 2 !important;
+              line-height: 1 !important;
+            }
+            .compact-countdown .fcc__digit_block {
+              grid-row: 1 !important;
+              order: 1 !important;
+            }
+          `}</style>
           <FlipClockCountdown
+            className="compact-countdown !flex-col scale-90"
+            showSeparators={false}
             to={targetDate}
             labels={['Días', 'Horas', 'Minutos', 'Segundos']}
             labelStyle={{
@@ -80,7 +108,7 @@ export function Countdown() {
               textTransform: 'uppercase',
               color: '#091a12',
               fontFamily: '"Cormorant Garamond", serif',
-              marginTop: isMobile ? '6px' : '12px',
+              marginTop: '2px',
               textShadow: '0px 1px 2px rgba(255,255,255,0.5)'
             }}
             digitBlockStyle={{
