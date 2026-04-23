@@ -83,7 +83,7 @@ export function RSVP() {
     <section ref={sectionRef} id="rsvp" style={{ width: '100%', height: '100%' }}>
       <div className="book-message relative w-full h-full">
         <img
-          src="/img/7-confirmacion/7.png"
+          src="/img/7-confirmacion/7.webp"
           alt="Confirmación"
           className="book-message__img absolute inset-0 w-full h-full object-cover z-0"
         />

@@ -86,7 +86,7 @@ export function BookMessage() {
   return (
     <div className="book-message">
       <img
-        src="/img/2-cuento/2.png"
+        src="/img/2-cuento/2.webp"
         alt="Bosque"
         className="book-message__img"
       />
@@ -99,7 +99,7 @@ export function BookSofia() {
   return (
     <div className="book-message">
       <img
-        src="/img/3-invitacion/3.png"
+        src="/img/3-invitacion/3.webp"
         alt="Invitación"
         className="book-message__img"
       />

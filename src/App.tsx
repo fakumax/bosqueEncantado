@@ -38,11 +38,20 @@ function App() {
           <Suspense key="details" fallback={<LazyFallback />}><EventDetails /></Suspense>,
           <Suspense key="rsvp" fallback={<LazyFallback />}><RSVP /></Suspense>,
           <Suspense key="dresscode" fallback={<LazyFallback />}><DressCode /></Suspense>,
+          <section key="regalo" style={{ width: '100%', height: '100%' }}>
+            <div className="book-message">
+              <img
+                src="/img/9-regalo/9.webp"
+                alt="Mesa de regalos"
+                className="book-message__img"
+              />
+            </div>
+          </section>,
           <Suspense key="thankyou" fallback={<LazyFallback />}><ThankYou /></Suspense>,
           <section key="final" style={{ width: '100%', height: '100%' }}>
             <div className="book-message">
               <img
-                src="/img/10-final/10.png"
+                src="/img/11-final/11.webp"
                 alt="Final"
                 className="book-message__img"
               />

@@ -35,7 +35,7 @@ export function Ceremony() {
     <section ref={sectionRef} id="ceremonia" style={{ width: '100%', height: '100%' }}>
       <div className="book-message relative w-full h-full">
         <img
-          src="/img/4-ceremonia/4.png"
+          src="/img/4-ceremonia/4.webp"
           alt="Ceremonia"
           className="book-message__img absolute inset-0 w-full h-full object-cover z-0"
         />

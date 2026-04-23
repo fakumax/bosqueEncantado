@@ -7,7 +7,11 @@
         "dev": "vite",
         "build": "tsc -b --noCheck && vite build",
         "lint": "eslint .",
-        "preview": "vite preview"
+        "preview": "vite preview",
+        "img:optimize": "node scripts/optimize-images.mjs",
+        "img:webp": "node scripts/optimize-images.mjs --format=webp --quality=75 --max-width=1600 --backup",
+        "img:resize": "node scripts/optimize-images.mjs --format=keep --max-width=1600 --backup",
+        "img:dry": "node scripts/optimize-images.mjs --format=webp --quality=75 --max-width=1600 --dry"
     },
     "dependencies": {
         "@leenguyen/react-flip-clock-countdown": "^1.7.2",
@@ -44,6 +48,7 @@
         "eslint-plugin-react-refresh": "^0.4.19",
         "globals": "^16.0.0",
         "sass-embedded": "^1.98.0",
+        "sharp": "^0.34.5",
         "tailwindcss": "^4.2.2",
         "typescript": "~5.7.2",
         "typescript-eslint": "^8.38.0",
