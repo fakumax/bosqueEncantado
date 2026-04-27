@@ -5,7 +5,6 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
-import { Check } from '@phosphor-icons/react'
 import { toast } from 'sonner'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
@@ -36,6 +35,18 @@ export function RSVP() {
     }, sectionRef)
     return () => ctx.revert()
   }, [])
+
+  const handleGuestsChange = (value: string) => {
+    const digitsOnly = value.replace(/\D/g, '')
+
+    if (!digitsOnly) {
+      setGuests('')
+      return
+    }
+
+    const normalized = Math.min(Number(digitsOnly), 10)
+    setGuests(String(normalized))
+  }
 
   const GOOGLE_FORM_URL = 'https://docs.google.com/forms/d/e/1FAIpQLSdscPpHPmaqIU2xejar9qZsT93EysXlDKwEGXfHm79UadDGnQ/formResponse'
 
@@ -91,43 +102,42 @@ export function RSVP() {
         {/* Contenido colocado sobre la imagen */}
         <div 
           className="absolute z-10 w-full px-4 max-w-[340px]"
-          style={{ top: '30%', left: '50%', transform: 'translateX(-50%)' }}
+          style={{ top: '31%', left: '50%', transform: 'translateX(-50%)' }}
         >
-          <div className="text-center mb-3">
-            <p className="text-sm text-[#133221] font-bold drop-shadow-sm leading-tight">
-              Completa el formulario para confirmar tu presencia
-            </p>
-            <p className="text-xs text-[#8b6914] font-bold mt-1 drop-shadow-sm">
-              Fecha límite para confirmación de asistencia 6/5/2026
+          <div className="mt-6 mb-1 text-center">
+            <p className="text-xs text-[#262626] font-bold leading-snug drop-shadow-sm">
+              <span className="block">Fecha límite para confirmación</span>
+              <span className="block">de asistencia 23/5/2026</span>
             </p>
           </div>
 
-          <Card className="px-5 py-5 bg-[#091a12]/95 border border-[#c9a84c]/40 rounded-2xl shadow-2xl">
-            <form onSubmit={handleSubmit} className="space-y-4">
+          <Card className="px-5 pt-2 pb-1 bg-transparent border-0 rounded-2xl shadow-none">
+            <form onSubmit={handleSubmit} className="space-y-2.5" autoComplete="off">
               <div>
                 <Input
                   id="name"
                   type="text"
+                  autoComplete="off"
                   placeholder="Nombre completo *"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   required
-                  className="h-11 bg-[#133221]/60 border-[#c9a84c]/30 text-[#d4c896] placeholder:text-[#8BA995] focus:border-[#c9a84c] focus:ring-[#c9a84c]/20"
+                  className="h-11 bg-transparent border-[#b8860b] text-[17px] text-[#262626] placeholder:text-[#262626]/70 focus-visible:border-[#b8860b] focus-visible:ring-0 focus-visible:ring-offset-0 md:text-[17px]"
                 />
               </div>
 
-              <div className="space-y-2">
-                <Label className="text-sm font-semibold text-[#d4c896]">¿Podrás asistir? *</Label> 
+              <div className="space-y-1">
+                <Label className="text-base font-semibold text-[#262626]">¿Podrás asistir? *</Label> 
                 <RadioGroup value={attending} onValueChange={setAttending} className="flex gap-2">
-                  <div className="flex items-center space-x-2 px-3 py-2.5 rounded-lg border border-[#c9a84c]/30 hover:border-[#c9a84c] transition-colors flex-1 bg-[#133221]/40">
-                    <RadioGroupItem value="si" id="si" className="border-[#c9a84c] text-[#c9a84c]" />
-                    <Label htmlFor="si" className="cursor-pointer flex-1 text-sm font-medium text-[#d4c896]">
+                  <div className="flex items-center space-x-2 px-0 py-0.5 flex-1 bg-transparent">
+                    <RadioGroupItem value="si" id="si" className="border-[#b8860b] text-[#b8860b] focus-visible:border-[#b8860b] focus-visible:ring-0 focus-visible:ring-offset-0 [&_svg]:fill-[#b8860b]" />
+                    <Label htmlFor="si" className="cursor-pointer flex-1 text-base font-medium text-[#262626]">
                       Sí, asistiré
                     </Label>
                   </div>
-                  <div className="flex items-center space-x-2 px-3 py-2.5 rounded-lg border border-[#c9a84c]/30 hover:border-[#c9a84c] transition-colors flex-1 bg-[#133221]/40">
-                    <RadioGroupItem value="no" id="no" className="border-[#c9a84c] text-[#c9a84c]" />
-                    <Label htmlFor="no" className="cursor-pointer flex-1 text-sm font-medium text-[#d4c896]">
+                  <div className="flex items-center space-x-2 px-0 py-0.5 flex-1 bg-transparent">
+                    <RadioGroupItem value="no" id="no" className="border-[#b8860b] text-[#b8860b] focus-visible:border-[#b8860b] focus-visible:ring-0 focus-visible:ring-offset-0 [&_svg]:fill-[#b8860b]" />
+                    <Label htmlFor="no" className="cursor-pointer flex-1 text-base font-medium text-[#262626]">
                       No podré
                     </Label>
                   </div>
@@ -138,41 +148,49 @@ export function RSVP() {
                 <div>
                   <Input
                     id="guests"
-                    type="number"
-                    min="1"
-                    max="10"
+                    type="text"
+                    autoComplete="off"
+                    inputMode="numeric"
+                    pattern="[0-9]*"
                     placeholder="Nº de acompañantes (incluyéndote)"
                     value={guests}
-                    onChange={(e) => setGuests(e.target.value)}
-                    className="h-11 bg-[#133221]/60 border-[#c9a84c]/30 text-[#d4c896] placeholder:text-[#8BA995] focus:border-[#c9a84c] focus:ring-[#c9a84c]/20"
+                    onChange={(e) => handleGuestsChange(e.target.value)}
+                    className="h-11 bg-transparent border-[#b8860b] text-[17px] text-[#262626] placeholder:text-[#262626]/70 focus-visible:border-[#b8860b] focus-visible:ring-0 focus-visible:ring-offset-0 md:text-[17px]"
                   />
                 </div>
               )}
 
+              {attending === 'no' && <div aria-hidden="true" className="h-2" />}
+
               <div>
                 <Textarea
                   id="message"
+                  autoComplete="off"
                   placeholder="Mensaje para Sofía (opcional)"
                   value={message}
                   onChange={(e) => setMessage(e.target.value)}
-                  rows={2}
-                  className="resize-none text-sm bg-[#133221]/60 border-[#c9a84c]/30 text-[#d4c896] placeholder:text-[#8BA995] focus:border-[#c9a84c] focus:ring-[#c9a84c]/20"
+                  rows={attending === 'si' ? 1 : 2}
+                  className={`resize-none overflow-hidden [field-sizing:fixed] bg-transparent border-[#b8860b] text-[17px] text-[#262626] placeholder:text-[#262626]/70 focus-visible:border-[#b8860b] focus-visible:ring-0 focus-visible:ring-offset-0 md:text-[17px] ${
+                    attending === 'si' ? 'h-11 min-h-11' : 'h-20 min-h-20'
+                  }`}
                 />
               </div>
 
               <Button
                 type="submit"
                 disabled={isSubmitting}
-                className="w-full h-11 bg-[#c9a84c] hover:bg-[#ebd594] text-[#091a12] font-bold uppercase tracking-wider text-sm transition-all"
+                variant="ghost"
+                aria-label={isSubmitting ? 'Enviando confirmación' : 'Confirmar asistencia'}
+                className="!-mt-4 mx-auto flex h-auto w-[220px] max-w-[72%] bg-transparent p-0 shadow-none hover:bg-transparent focus-visible:ring-0 focus-visible:ring-offset-0 disabled:opacity-60"
               >
-                {isSubmitting ? (
-                  'Enviando...'
-                ) : (
-                  <span className="flex items-center justify-center gap-2">       
-                    <Check size={20} weight="bold" />
-                    Confirmar Asistencia
-                  </span>
-                )}
+                <img
+                  src="/img/botonConfirmar.webp"
+                  alt=""
+                  className="block h-auto w-full object-contain"
+                />
+                <span className="sr-only">
+                  {isSubmitting ? 'Enviando confirmación' : 'Confirmar asistencia'}
+                </span>
               </Button>
             </form>
           </Card>

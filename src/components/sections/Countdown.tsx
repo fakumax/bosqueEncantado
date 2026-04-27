@@ -69,18 +69,18 @@ export function Countdown() {
 
         <div 
           className="absolute flex justify-center items-center z-10"
-          style={{ top: '50%', left: '42%', transform: 'translate(-50%, -50%)' }}
+          style={{ top: '50%', left: '36%', transform: 'translate(-50%, -50%)' }}
         >
           <style>{`
             .compact-countdown { gap: 0 !important; }
             .compact-countdown .fcc__unit_time { 
               display: grid !important;
               grid-template-columns: auto auto !important;
-              column-gap: 2px !important;
+              column-gap: 3px !important;
               row-gap: 0 !important;
               align-items: center !important;
               justify-content: center !important;
-              margin-bottom: -40px !important;
+              margin-bottom: ${isMobile ? '-60px' : '-54px'} !important;
             }
             .compact-countdown .fcc__label { 
               position: static !important;
@@ -89,7 +89,7 @@ export function Countdown() {
               grid-row: 2 !important;
               text-align: center !important;
               order: 2 !important;
-              margin-top: 2 !important;
+              margin-top: 4px !important;
               line-height: 1 !important;
             }
             .compact-countdown .fcc__digit_block {
@@ -98,12 +98,12 @@ export function Countdown() {
             }
           `}</style>
           <FlipClockCountdown
-            className="compact-countdown !flex-col scale-90"
+            className="compact-countdown !flex-col"
             showSeparators={false}
             to={targetDate}
             labels={['Días', 'Horas', 'Minutos', 'Segundos']}
             labelStyle={{
-              fontSize: isMobile ? 9 : 13,
+              fontSize: isMobile ? 12 : 14,
               fontWeight: 800,
               textTransform: 'uppercase',
               color: '#091a12',
@@ -112,9 +112,9 @@ export function Countdown() {
               textShadow: '0px 1px 2px rgba(255,255,255,0.5)'
             }}
             digitBlockStyle={{
-              width: isMobile ? 30 : 60,
-              height: isMobile ? 45 : 85,
-              fontSize: isMobile ? 24 : 45,
+              width: isMobile ? 38 : 68,
+              height: isMobile ? 50 : 80,
+              fontSize: isMobile ? 30 : 52,
               backgroundColor: 'rgba(9, 26, 18, 0.85)',
               color: '#d4c896',
               boxShadow: '0 4px 15px rgba(0,0,0,0.6)',

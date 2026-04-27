@@ -18,8 +18,8 @@ interface StoryBookProps {
 // a la imagen de fondo, sin importar el tamaño del celu.
 const DESIGN_W = 412
 
-const FLIP_DURATION_S = 0.75
-const COOLDOWN_MS = 850
+const FLIP_DURATION_S = 0.55
+const COOLDOWN_MS = 600
 const SWIPE_MIN_PX = 50
 const WHEEL_MIN_PX = 15
 
@@ -38,6 +38,7 @@ export function StoryBook({ children }: StoryBookProps) {
   const flipAngle = useMotionValue(0)
   const isAnimatingRef = useRef(false)
   const lastFlipTime = useRef(0)
+  const layoutViewportRef = useRef({ width: 0, height: 0 })
 
   // Calcular escala del stage en función del viewport.
   // Siempre llena el ancho; la altura se adapta al viewport.
@@ -46,8 +47,25 @@ export function StoryBook({ children }: StoryBookProps) {
       const w = window.innerWidth
       const h = window.innerHeight
       const s = w / DESIGN_W
+      const isTouchViewport = window.matchMedia('(pointer: coarse)').matches
+      const previous = layoutViewportRef.current
+      const activeElement = document.activeElement
+      const hasFocusedField =
+        activeElement instanceof HTMLElement &&
+        (activeElement.tagName === 'INPUT' ||
+          activeElement.tagName === 'TEXTAREA' ||
+          activeElement.tagName === 'SELECT' ||
+          activeElement.isContentEditable)
+      const widthChanged = Math.abs(previous.width - w) > 2
+      const layoutHeight = isTouchViewport && !widthChanged && previous.height && hasFocusedField
+        ? previous.height
+        : isTouchViewport && !widthChanged && previous.height
+          ? Math.max(previous.height, h)
+        : h
+
+      layoutViewportRef.current = { width: w, height: layoutHeight }
       setScale(s)
-      setStageH(h / s)
+      setStageH(layoutHeight / s)
     }
     update()
     window.addEventListener('resize', update)
@@ -110,10 +128,15 @@ export function StoryBook({ children }: StoryBookProps) {
     }
 
     const handleTouchEnd = (e: TouchEvent) => {
+      const dx = touchStartX - e.changedTouches[0].clientX
       const dy = touchStartY - e.changedTouches[0].clientY
-      const dx = Math.abs(touchStartX - e.changedTouches[0].clientX)
-      if (Math.abs(dy) > SWIPE_MIN_PX && Math.abs(dy) > dx) {
+      const absX = Math.abs(dx)
+      const absY = Math.abs(dy)
+
+      if (absY > SWIPE_MIN_PX && absY > absX) {
         tryFlip(dy > 0 ? 'next' : 'prev')
+      } else if (absX > SWIPE_MIN_PX && absX > absY) {
+        tryFlip(dx > 0 ? 'next' : 'prev')
       }
     }
 
