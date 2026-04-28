@@ -89,6 +89,7 @@ export function Countdown() {
               grid-row: 2 !important;
               text-align: center !important;
               order: 2 !important;
+              color: #091a12 !important;
               margin-top: 4px !important;
               line-height: 1 !important;
             }
