@@ -12,6 +12,14 @@
   font-display: swap;
 }
 
+@font-face {
+  font-family: 'Monotype Corsiva';
+  src: url('/font/Monotype-Corsiva-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
 // ─── Color Palette (matching dress fabric) ───────────────
 $mint-deep: #091a12;
 $mint-dark: #0c2218;

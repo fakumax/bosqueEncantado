@@ -12,6 +12,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger'
 gsap.registerPlugin(ScrollTrigger)
 
 const FORM_TEXT_COLOR = '#0c2218'
+const FORM_FONT_FAMILY = "'Monotype Corsiva', 'Segoe Script', cursive"
 
 export function RSVP() {
   const sectionRef = useRef<HTMLElement>(null)
@@ -110,8 +111,8 @@ export function RSVP() {
             className="absolute z-10 w-full px-4 max-w-[340px]"
             style={{ top: '40.5%', left: '50%', transform: 'translateX(-50%)' }}
           >
-          <Card className="px-5 pt-2 pb-1 bg-transparent border-0 rounded-2xl shadow-none !text-[#0c2218]" style={{ color: FORM_TEXT_COLOR }}>
-            <form onSubmit={handleSubmit} className="space-y-2.5 !text-[#0c2218] [color-scheme:light]" autoComplete="off" style={{ color: FORM_TEXT_COLOR }}>
+          <Card className="px-5 pt-2 pb-1 bg-transparent border-0 rounded-2xl shadow-none !text-[#0c2218]" style={{ color: FORM_TEXT_COLOR, fontFamily: FORM_FONT_FAMILY }}>
+            <form onSubmit={handleSubmit} className="space-y-2.5 !text-[#0c2218] [color-scheme:light]" autoComplete="off" style={{ color: FORM_TEXT_COLOR, fontFamily: FORM_FONT_FAMILY }}>
               <div>
                 <Input
                   id="name"
@@ -122,22 +123,22 @@ export function RSVP() {
                   onChange={(e) => setName(e.target.value)}
                   required
                   className="h-11 bg-transparent border-[#b8860b] text-[17px] !text-[#0c2218] placeholder:!text-[#0c2218]/70 focus-visible:border-[#b8860b] focus-visible:ring-0 focus-visible:ring-offset-0 md:text-[17px] [color-scheme:light]"
-                  style={{ color: FORM_TEXT_COLOR, WebkitTextFillColor: FORM_TEXT_COLOR }}
+                  style={{ color: FORM_TEXT_COLOR, WebkitTextFillColor: FORM_TEXT_COLOR, fontFamily: FORM_FONT_FAMILY }}
                 />
               </div>
 
               <div className="space-y-1">
-                <Label className="text-base font-semibold !text-[#0c2218]" style={{ color: FORM_TEXT_COLOR }}>¿Podrás asistir? *</Label> 
+                <Label className="text-base font-semibold !text-[#0c2218]" style={{ color: FORM_TEXT_COLOR, fontFamily: FORM_FONT_FAMILY }}>¿Podrás asistir? *</Label> 
                 <RadioGroup value={attending} onValueChange={setAttending} className="flex gap-2">
                   <div className="flex items-center space-x-2 px-0 py-0.5 flex-1 bg-transparent">
                     <RadioGroupItem value="si" id="si" className="border-[#b8860b] text-[#b8860b] focus-visible:border-[#b8860b] focus-visible:ring-0 focus-visible:ring-offset-0 [&_svg]:fill-[#b8860b]" />
-                    <Label htmlFor="si" className="cursor-pointer flex-1 text-base font-medium !text-[#0c2218]" style={{ color: FORM_TEXT_COLOR }}>
+                    <Label htmlFor="si" className="cursor-pointer flex-1 text-base font-medium !text-[#0c2218]" style={{ color: FORM_TEXT_COLOR, fontFamily: FORM_FONT_FAMILY }}>
                       Sí, asistiré
                     </Label>
                   </div>
                   <div className="flex items-center space-x-2 px-0 py-0.5 flex-1 bg-transparent">
                     <RadioGroupItem value="no" id="no" className="border-[#b8860b] text-[#b8860b] focus-visible:border-[#b8860b] focus-visible:ring-0 focus-visible:ring-offset-0 [&_svg]:fill-[#b8860b]" />
-                    <Label htmlFor="no" className="cursor-pointer flex-1 text-base font-medium !text-[#0c2218]" style={{ color: FORM_TEXT_COLOR }}>
+                    <Label htmlFor="no" className="cursor-pointer flex-1 text-base font-medium !text-[#0c2218]" style={{ color: FORM_TEXT_COLOR, fontFamily: FORM_FONT_FAMILY }}>
                       No podré
                     </Label>
                   </div>
@@ -156,7 +157,7 @@ export function RSVP() {
                     value={guests}
                     onChange={(e) => handleGuestsChange(e.target.value)}
                     className="h-11 bg-transparent border-[#b8860b] text-[17px] !text-[#0c2218] placeholder:!text-[#0c2218]/70 focus-visible:border-[#b8860b] focus-visible:ring-0 focus-visible:ring-offset-0 md:text-[17px] [color-scheme:light]"
-                    style={{ color: FORM_TEXT_COLOR, WebkitTextFillColor: FORM_TEXT_COLOR }}
+                    style={{ color: FORM_TEXT_COLOR, WebkitTextFillColor: FORM_TEXT_COLOR, fontFamily: FORM_FONT_FAMILY }}
                   />
                 </div>
               )}
@@ -174,7 +175,7 @@ export function RSVP() {
                   className={`resize-none overflow-hidden [field-sizing:fixed] bg-transparent border-[#b8860b] text-[17px] !text-[#0c2218] placeholder:!text-[#0c2218]/70 focus-visible:border-[#b8860b] focus-visible:ring-0 focus-visible:ring-offset-0 md:text-[17px] [color-scheme:light] ${
                     attending === 'si' ? 'h-11 min-h-11' : 'h-20 min-h-20'
                   }`}
-                  style={{ color: FORM_TEXT_COLOR, WebkitTextFillColor: FORM_TEXT_COLOR }}
+                  style={{ color: FORM_TEXT_COLOR, WebkitTextFillColor: FORM_TEXT_COLOR, fontFamily: FORM_FONT_FAMILY }}
                 />
               </div>
 

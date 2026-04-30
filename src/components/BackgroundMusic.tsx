@@ -6,7 +6,7 @@ import gsap from 'gsap'
  * Drops your audio file into public/music/ and set the filename here.
  * The file will be served from /music/<filename>.
  */
-const MUSIC_SRC = '/music/NewForest.m4a'
+const MUSIC_SRC = '/music/NewForest-fast.m4a'
 const MUSIC_TYPE = 'audio/mp4'
 
 export function BackgroundMusic() {
@@ -14,41 +14,36 @@ export function BackgroundMusic() {
   const btnRef = useRef<HTMLButtonElement>(null)
   const [muted, setMuted] = useState(false)
   const hasStarted = useRef(false)
+  const isStarting = useRef(false)
 
   useEffect(() => {
     const audio = audioRef.current
     if (!audio) return
 
-    // Pre-buffer: force the browser to start downloading now
+    audio.volume = 0.35
     audio.load()
 
-    const tryPlay = () => {
-      if (hasStarted.current) return
+    const startMusic = () => {
+      if (hasStarted.current || isStarting.current) return
 
-      audio.volume = 0.35
+      isStarting.current = true
       audio.play().then(() => {
         hasStarted.current = true
+        isStarting.current = false
         cleanup()
       }).catch(() => {
-        // Browser still blocking — will retry on next gesture
+        isStarting.current = false
       })
     }
 
-    // If audio is already buffered enough, play on first gesture instantly
-    // Otherwise wait until canplaythrough fires, then try again
-    const onReady = () => tryPlay()
-
-    const gestureEvents = ['click', 'touchstart', 'scroll', 'keydown'] as const
+    const gestureEvents = ['pointerdown', 'touchstart', 'click', 'keydown'] as const
     const cleanup = () => {
-      gestureEvents.forEach((e) => window.removeEventListener(e, tryPlay))
-      audio.removeEventListener('canplaythrough', onReady)
+      gestureEvents.forEach((eventName) => window.removeEventListener(eventName, startMusic, true))
     }
 
-    gestureEvents.forEach((e) => window.addEventListener(e, tryPlay, { passive: true }))
-    audio.addEventListener('canplaythrough', onReady)
-
-    // Attempt immediately in case the browser allows it
-    tryPlay()
+    gestureEvents.forEach((eventName) => {
+      window.addEventListener(eventName, startMusic, { capture: true, passive: true })
+    })
 
     return cleanup
   }, [])
