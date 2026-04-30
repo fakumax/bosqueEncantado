@@ -14,7 +14,6 @@ export function BackgroundMusic() {
   const btnRef = useRef<HTMLButtonElement>(null)
   const [muted, setMuted] = useState(false)
   const hasStarted = useRef(false)
-  const isStarting = useRef(false)
 
   useEffect(() => {
     const audio = audioRef.current
@@ -24,25 +23,37 @@ export function BackgroundMusic() {
     audio.load()
 
     const startMusic = () => {
-      if (hasStarted.current || isStarting.current) return
+      if (hasStarted.current) return
 
-      isStarting.current = true
       audio.play().then(() => {
         hasStarted.current = true
-        isStarting.current = false
         cleanup()
       }).catch(() => {
-        isStarting.current = false
+        // Some browsers only allow audio on a later part of the same gesture.
       })
     }
 
-    const gestureEvents = ['pointerdown', 'touchstart', 'click', 'keydown'] as const
+    const gestureEvents = [
+      'pointerdown',
+      'touchstart',
+      'touchmove',
+      'touchend',
+      'wheel',
+      'scroll',
+      'click',
+      'keydown',
+    ] as const
+    const gestureTargets = [window, document] as const
     const cleanup = () => {
-      gestureEvents.forEach((eventName) => window.removeEventListener(eventName, startMusic, true))
+      gestureTargets.forEach((target) => {
+        gestureEvents.forEach((eventName) => target.removeEventListener(eventName, startMusic, true))
+      })
     }
 
-    gestureEvents.forEach((eventName) => {
-      window.addEventListener(eventName, startMusic, { capture: true, passive: true })
+    gestureTargets.forEach((target) => {
+      gestureEvents.forEach((eventName) => {
+        target.addEventListener(eventName, startMusic, { capture: true, passive: true })
+      })
     })
 
     return cleanup

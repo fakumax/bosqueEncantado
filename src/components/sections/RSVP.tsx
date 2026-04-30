@@ -18,7 +18,6 @@ export function RSVP() {
   const sectionRef = useRef<HTMLElement>(null)
   const [name, setName] = useState('')
   const [attending, setAttending] = useState('si')
-  const [guests, setGuests] = useState('')
   const [message, setMessage] = useState('')
   const [isSubmitting, setIsSubmitting] = useState(false)
 
@@ -39,18 +38,6 @@ export function RSVP() {
     return () => ctx.revert()
   }, [])
 
-  const handleGuestsChange = (value: string) => {
-    const digitsOnly = value.replace(/\D/g, '')
-
-    if (!digitsOnly) {
-      setGuests('')
-      return
-    }
-
-    const normalized = Math.min(Number(digitsOnly), 10)
-    setGuests(String(normalized))
-  }
-
   const GOOGLE_FORM_URL = 'https://docs.google.com/forms/d/e/1FAIpQLSdscPpHPmaqIU2xejar9qZsT93EysXlDKwEGXfHm79UadDGnQ/formResponse'
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -67,7 +54,7 @@ export function RSVP() {
       const formData = new URLSearchParams()
       formData.append('entry.1490533021', name.trim())
       formData.append('entry.2045038163', attending === 'si' ? 'Si' : 'No')
-      formData.append('entry.452084798', attending === 'si' ? guests : '0')
+      formData.append('entry.452084798', attending === 'si' ? '1' : '0')
       formData.append('entry.1196307146', message.trim())
 
       await fetch(GOOGLE_FORM_URL, {
@@ -84,7 +71,6 @@ export function RSVP() {
 
       setName('')
       setAttending('si')
-      setGuests('')
       setMessage('')
     } catch {
       toast.error('Error al enviar. Intentá de nuevo.')
@@ -144,25 +130,6 @@ export function RSVP() {
                   </div>
                 </RadioGroup>
               </div>
-
-              {attending === 'si' && (
-                <div>
-                  <Input
-                    id="guests"
-                    type="text"
-                    autoComplete="off"
-                    inputMode="numeric"
-                    pattern="[0-9]*"
-                    placeholder="Nº de acompañantes (incluyéndote)"
-                    value={guests}
-                    onChange={(e) => handleGuestsChange(e.target.value)}
-                    className="h-11 bg-transparent border-[#b8860b] text-[17px] !text-[#0c2218] placeholder:!text-[#0c2218]/70 focus-visible:border-[#b8860b] focus-visible:ring-0 focus-visible:ring-offset-0 md:text-[17px] [color-scheme:light]"
-                    style={{ color: FORM_TEXT_COLOR, WebkitTextFillColor: FORM_TEXT_COLOR, fontFamily: FORM_FONT_FAMILY }}
-                  />
-                </div>
-              )}
-
-              {attending === 'no' && <div aria-hidden="true" className="h-2" />}
 
               <div>
                 <Textarea

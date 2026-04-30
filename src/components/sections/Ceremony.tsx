@@ -38,7 +38,7 @@ export function Ceremony() {
         {/* Contenido colocado sobre la imagen */}
         <div
           className="absolute z-10"
-          style={{ bottom: '63%', left: '50%', transform: 'translate(-50%, 50%)' }}
+          style={{ bottom: '54%', left: '35%', transform: 'translate(-50%, 50%)' }}
         >
           <a
             href={mapsUrl}
