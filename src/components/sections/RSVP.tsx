@@ -11,11 +11,13 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger'
 
 gsap.registerPlugin(ScrollTrigger)
 
+const FORM_TEXT_COLOR = '#0c2218'
+
 export function RSVP() {
   const sectionRef = useRef<HTMLElement>(null)
   const [name, setName] = useState('')
   const [attending, setAttending] = useState('si')
-  const [guests, setGuests] = useState('1')
+  const [guests, setGuests] = useState('')
   const [message, setMessage] = useState('')
   const [isSubmitting, setIsSubmitting] = useState(false)
 
@@ -81,7 +83,7 @@ export function RSVP() {
 
       setName('')
       setAttending('si')
-      setGuests('1')
+      setGuests('')
       setMessage('')
     } catch {
       toast.error('Error al enviar. Intentá de nuevo.')
@@ -92,27 +94,24 @@ export function RSVP() {
 
   return (
     <section ref={sectionRef} id="rsvp" style={{ width: '100%', height: '100%' }}>
-      <div className="book-message relative w-full h-full">
-        <img
-          src="/img/7-confirmacion/7.webp"
-          alt="Confirmación"
-          className="book-message__img absolute inset-0 w-full h-full object-cover z-0"
-        />
-
-        {/* Contenido colocado sobre la imagen */}
-        <div 
-          className="absolute z-10 w-full px-4 max-w-[340px]"
-          style={{ top: '31%', left: '50%', transform: 'translateX(-50%)' }}
+      <div className="book-message">
+        <div
+          className="absolute left-0 top-1/2 w-full -translate-y-1/2"
+          style={{ aspectRatio: '1536 / 2754' }}
         >
-          <div className="mt-6 mb-1 text-center">
-            <p className="text-xs text-[#262626] font-bold leading-snug drop-shadow-sm">
-              <span className="block">Fecha límite para confirmación</span>
-              <span className="block">de asistencia 23/5/2026</span>
-            </p>
-          </div>
+          <img
+            src="/img/7-confirmacion/7.webp"
+            alt="Confirmación"
+            className="absolute inset-0 z-0 h-full w-full object-contain"
+          />
 
-          <Card className="px-5 pt-2 pb-1 bg-transparent border-0 rounded-2xl shadow-none">
-            <form onSubmit={handleSubmit} className="space-y-2.5" autoComplete="off">
+          {/* Contenido colocado sobre la imagen */}
+          <div
+            className="absolute z-10 w-full px-4 max-w-[340px]"
+            style={{ top: '40.5%', left: '50%', transform: 'translateX(-50%)' }}
+          >
+          <Card className="px-5 pt-2 pb-1 bg-transparent border-0 rounded-2xl shadow-none !text-[#0c2218]" style={{ color: FORM_TEXT_COLOR }}>
+            <form onSubmit={handleSubmit} className="space-y-2.5 !text-[#0c2218] [color-scheme:light]" autoComplete="off" style={{ color: FORM_TEXT_COLOR }}>
               <div>
                 <Input
                   id="name"
@@ -122,22 +121,23 @@ export function RSVP() {
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   required
-                  className="h-11 bg-transparent border-[#b8860b] text-[17px] text-[#262626] placeholder:text-[#262626]/70 focus-visible:border-[#b8860b] focus-visible:ring-0 focus-visible:ring-offset-0 md:text-[17px]"
+                  className="h-11 bg-transparent border-[#b8860b] text-[17px] !text-[#0c2218] placeholder:!text-[#0c2218]/70 focus-visible:border-[#b8860b] focus-visible:ring-0 focus-visible:ring-offset-0 md:text-[17px] [color-scheme:light]"
+                  style={{ color: FORM_TEXT_COLOR, WebkitTextFillColor: FORM_TEXT_COLOR }}
                 />
               </div>
 
               <div className="space-y-1">
-                <Label className="text-base font-semibold text-[#262626]">¿Podrás asistir? *</Label> 
+                <Label className="text-base font-semibold !text-[#0c2218]" style={{ color: FORM_TEXT_COLOR }}>¿Podrás asistir? *</Label> 
                 <RadioGroup value={attending} onValueChange={setAttending} className="flex gap-2">
                   <div className="flex items-center space-x-2 px-0 py-0.5 flex-1 bg-transparent">
                     <RadioGroupItem value="si" id="si" className="border-[#b8860b] text-[#b8860b] focus-visible:border-[#b8860b] focus-visible:ring-0 focus-visible:ring-offset-0 [&_svg]:fill-[#b8860b]" />
-                    <Label htmlFor="si" className="cursor-pointer flex-1 text-base font-medium text-[#262626]">
+                    <Label htmlFor="si" className="cursor-pointer flex-1 text-base font-medium !text-[#0c2218]" style={{ color: FORM_TEXT_COLOR }}>
                       Sí, asistiré
                     </Label>
                   </div>
                   <div className="flex items-center space-x-2 px-0 py-0.5 flex-1 bg-transparent">
                     <RadioGroupItem value="no" id="no" className="border-[#b8860b] text-[#b8860b] focus-visible:border-[#b8860b] focus-visible:ring-0 focus-visible:ring-offset-0 [&_svg]:fill-[#b8860b]" />
-                    <Label htmlFor="no" className="cursor-pointer flex-1 text-base font-medium text-[#262626]">
+                    <Label htmlFor="no" className="cursor-pointer flex-1 text-base font-medium !text-[#0c2218]" style={{ color: FORM_TEXT_COLOR }}>
                       No podré
                     </Label>
                   </div>
@@ -155,7 +155,8 @@ export function RSVP() {
                     placeholder="Nº de acompañantes (incluyéndote)"
                     value={guests}
                     onChange={(e) => handleGuestsChange(e.target.value)}
-                    className="h-11 bg-transparent border-[#b8860b] text-[17px] text-[#262626] placeholder:text-[#262626]/70 focus-visible:border-[#b8860b] focus-visible:ring-0 focus-visible:ring-offset-0 md:text-[17px]"
+                    className="h-11 bg-transparent border-[#b8860b] text-[17px] !text-[#0c2218] placeholder:!text-[#0c2218]/70 focus-visible:border-[#b8860b] focus-visible:ring-0 focus-visible:ring-offset-0 md:text-[17px] [color-scheme:light]"
+                    style={{ color: FORM_TEXT_COLOR, WebkitTextFillColor: FORM_TEXT_COLOR }}
                   />
                 </div>
               )}
@@ -170,9 +171,10 @@ export function RSVP() {
                   value={message}
                   onChange={(e) => setMessage(e.target.value)}
                   rows={attending === 'si' ? 1 : 2}
-                  className={`resize-none overflow-hidden [field-sizing:fixed] bg-transparent border-[#b8860b] text-[17px] text-[#262626] placeholder:text-[#262626]/70 focus-visible:border-[#b8860b] focus-visible:ring-0 focus-visible:ring-offset-0 md:text-[17px] ${
+                  className={`resize-none overflow-hidden [field-sizing:fixed] bg-transparent border-[#b8860b] text-[17px] !text-[#0c2218] placeholder:!text-[#0c2218]/70 focus-visible:border-[#b8860b] focus-visible:ring-0 focus-visible:ring-offset-0 md:text-[17px] [color-scheme:light] ${
                     attending === 'si' ? 'h-11 min-h-11' : 'h-20 min-h-20'
                   }`}
+                  style={{ color: FORM_TEXT_COLOR, WebkitTextFillColor: FORM_TEXT_COLOR }}
                 />
               </div>
 
@@ -196,6 +198,7 @@ export function RSVP() {
           </Card>
 
 
+          </div>
         </div>
       </div>
     </section>

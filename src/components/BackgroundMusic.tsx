@@ -3,10 +3,11 @@ import { SpeakerHigh, SpeakerSlash } from '@phosphor-icons/react'
 import gsap from 'gsap'
 
 /**
- * Drops your mp3/ogg/wav into public/music/ and set the filename here.
+ * Drops your audio file into public/music/ and set the filename here.
  * The file will be served from /music/<filename>.
  */
-const MUSIC_MP3 = '/music/Magical Forest.mp3'
+const MUSIC_SRC = '/music/NewForest.m4a'
+const MUSIC_TYPE = 'audio/mp4'
 
 export function BackgroundMusic() {
   const audioRef = useRef<HTMLAudioElement>(null)
@@ -85,7 +86,7 @@ export function BackgroundMusic() {
   return (
     <>
       <audio ref={audioRef} loop preload="auto">
-        <source src={MUSIC_MP3} type="audio/mpeg" />
+        <source src={MUSIC_SRC} type={MUSIC_TYPE} />
       </audio>
 
       <button

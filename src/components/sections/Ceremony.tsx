@@ -24,7 +24,7 @@ export function Ceremony() {
     return () => ctx.revert()
   }, [])
 
-  const mapsUrl = 'https://maps.google.com/' // Cambiar al link real
+  const mapsUrl = 'https://maps.app.goo.gl/Y6GnVyaDDfvvESLU7'
 
   return (
     <section ref={sectionRef} id="ceremonia" style={{ width: '100%', height: '100%' }}>
