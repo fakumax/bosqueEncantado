@@ -3,6 +3,7 @@ import { BookCover, BookMessage, BookSofia } from '@/components/sections/BookCov
 import { StoryBook } from '@/components/StoryBook'
 import { Toaster } from '@/components/ui/sonner'
 import { BackgroundMusic } from '@/components/BackgroundMusic'
+import { GlobalSparklesVideo } from '@/components/effects/GlobalSparklesVideo'
 
 // Lazy load components that aren't visible on the first page
 const Countdown = lazy(() => import('@/components/sections/Countdown').then(m => ({ default: m.Countdown })))
@@ -59,6 +60,7 @@ function App() {
           </section>,
         ]}
       </StoryBook>
+      <GlobalSparklesVideo />
     </div>
   )
 }
