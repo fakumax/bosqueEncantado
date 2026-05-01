@@ -14,12 +14,12 @@ export function Navigation({ isMenuOpen, setIsMenuOpen }: NavigationProps) {
 
   const navItems = [
     { label: 'Inicio', href: '#inicio' },
-    { label: 'Cuenta Regresiva', href: '#countdown' },
     { label: 'Detalles', href: '#detalles' },
+    { label: 'Cuenta Regresiva', href: '#countdown' },
     { label: 'Ubicación', href: '#ubicacion' },
-    { label: 'RSVP', href: '#rsvp' },
     { label: 'Fotos', href: '#fotos' },
     { label: 'Regalos', href: '#regalos' },
+    { label: 'RSVP', href: '#rsvp' },
     { label: 'Música', href: '#musica' },
   ]
 

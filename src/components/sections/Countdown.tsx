@@ -49,7 +49,7 @@ export function Countdown() {
       <section ref={sectionRef} id="countdown" style={{ width: '100%', height: '100%' }}>
         <div className="book-message">
           <img
-            src="/img/5-cuenta-regresiva/5.webp"
+            src="/img/6-cuenta-regresiva/6.webp"
             alt="Cuenta Regresiva"
             className="book-message__img"
           />
@@ -62,7 +62,7 @@ export function Countdown() {
     <section ref={sectionRef} id="countdown" style={{ width: '100%', height: '100%' }}>
       <div className="book-message">
         <img
-          src="/img/5-cuenta-regresiva/5.webp"
+          src="/img/6-cuenta-regresiva/6.webp"
           alt="Cuenta Regresiva"
           className="book-message__img"
         />

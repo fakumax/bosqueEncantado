@@ -26,16 +26,17 @@ El libro interactivo tiene las siguientes páginas en orden. Los componentes viv
 
 | # | Componente | Descripción |
 |---|---|---|
-| 1 | `BookCover` | Video de bosque con animación "Érase una vez…" |
-| 2 | `BookMessage` | Prólogo de la historia sobre imagen del bosque |
-| 3 | `BookSofia` | Nombre de Sofía animado, texto de invitación y fecha |
+| 1 | `BookCover` | Portada ilustrada del libro |
+| 2 | `BookMessage` | Inicio del cuento sobre imagen del bosque |
+| 3 | `BookStoryContinuation` | Continuación del cuento en imagen |
 | 4 | `Ceremony` | Datos de la misa: iglesia, dirección, horario y link a Maps |
-| 5 | `Countdown` | Temporizador de cuenta regresiva al evento |
-| 6 | `EventDetails` | Fecha, hora, salón y link de cómo llegar |
-| 7 | `RSVP` | Confirmación de asistencia por WhatsApp |
-| 8 | `DressCode` | Dress code (Formal y Elegante) + datos de mesa de regalos |
-| 9 | `ThankYou` | Mensaje de cierre con destellos |
-| 10 | *(inline en App.tsx)* | Página final con imagen de cierre |
+| 5 | `EventDetails` | Detalles de la fiesta: fecha, hora, salón y link de cómo llegar |
+| 6 | `Countdown` | Temporizador de cuenta regresiva al evento |
+| 7 | `DressCode` | Dress code (Formal y Elegante) |
+| 8 | `GiftRegistry` | Regalo |
+| 9 | `RSVP` | Confirmación de asistencia por WhatsApp |
+| 10 | `ThankYou` | Mensaje de cierre con destellos |
+| 11 | `FinalPage` | Página final con imagen de cierre |
 
 ## Imágenes
 
@@ -43,14 +44,15 @@ Las imágenes de fondo de cada página están en `public/img/` organizadas por n
 
 ```
 public/img/
-  1-video/
+  1-portada/
   2-cuento/
-  3-invitacion/
+  3-continuacion-cuento/
   4-ceremonia/
-  5-cuenta-regresiva/
-  6-detalles/
-  7-confirmacion/
-  8-vestimentaRegalo/   ← dress code + regalos en una sola página
-  9-despedida/
-  10-final/
+  5-detalles/
+  6-cuenta-regresiva/
+  7-vestimenta/
+  8-regalo/
+  9-confirmacion/
+  10-despedida/
+  11-final/
 ```

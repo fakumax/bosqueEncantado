@@ -30,7 +30,7 @@ export function EventDetails() {
     <section ref={sectionRef} id="detalles" style={{ width: '100%', height: '100%' }}>
       <div className="book-message">
         <img
-          src="/img/6-detalles/6.webp"
+          src="/img/5-detalles/5.webp"
           alt="Detalles"
           className="book-message__img"
         />

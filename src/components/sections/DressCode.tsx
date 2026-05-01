@@ -29,7 +29,7 @@ export function DressCode() {
     <section ref={sectionRef} id="dresscode" style={{ width: '100%', height: '100%' }}>
       <div className="book-message relative w-full h-full">
         <img
-          src="/img/8-vestimenta/8.webp"
+          src="/img/7-vestimenta/7.webp"
           alt="Código de vestimenta y regalos"
           className="book-message__img absolute inset-0 w-full h-full object-cover z-0"
         />

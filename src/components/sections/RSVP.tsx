@@ -87,7 +87,7 @@ export function RSVP() {
           style={{ aspectRatio: '1536 / 2754' }}
         >
           <img
-            src="/img/7-confirmacion/7.webp"
+            src="/img/9-confirmacion/9.webp"
             alt="Confirmación"
             className="absolute inset-0 z-0 h-full w-full object-contain"
           />

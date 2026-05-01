@@ -49,7 +49,7 @@ export function FloatingFlowers() {
         duration: 0.37,
       }, 0.08)
 
-      // 3) Princess message fades in (0.35 → 0.55)
+      // 3) Story message fades in (0.35 → 0.55)
       tl.fromTo(messageRef.current, {
         opacity: 0,
         y: 40,
@@ -62,7 +62,7 @@ export function FloatingFlowers() {
         duration: 0.2,
       }, 0.35)
 
-      // 4) Princess message fades out (0.7 → 0.9)
+      // 4) Story message fades out (0.7 → 0.9)
       tl.to(messageRef.current, {
         opacity: 0,
         y: -50,
@@ -115,7 +115,7 @@ export function FloatingFlowers() {
         </p>
       </div>
 
-      {/* Princess message — revealed after curtain opens */}
+      {/* Story message — revealed after curtain opens */}
       <div ref={messageRef} className="flower-curtain__message">
         <Sparkle size={32} weight="fill" className="flower-curtain__message-sparkle" />
         <p className="flower-curtain__message-line1">
