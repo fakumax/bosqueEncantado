@@ -13,7 +13,6 @@ const RSVP = lazy(() => import('@/components/sections/RSVP').then(m => ({ defaul
 const DressCode = lazy(() => import('@/components/sections/DressCode').then(m => ({ default: m.DressCode })))
 const ThankYou = lazy(() => import('@/components/sections/ThankYou').then(m => ({ default: m.ThankYou })))
 const Butterflies = lazy(() => import('@/components/effects/Butterflies').then(m => ({ default: m.Butterflies })))
-const MagicParticles = lazy(() => import('@/components/effects/MagicParticles').then(m => ({ default: m.MagicParticles })))
 const MagicalFireflies = lazy(() => import('@/components/effects/MagicalFireflies').then(m => ({ default: m.MagicalFireflies })))
 
 const LazyFallback = () => <div className="w-full h-full bg-[#091a12]" />
@@ -24,7 +23,6 @@ function App() {
       <Toaster position="top-center" />
       <BackgroundMusic />
       <Suspense fallback={null}>
-        <MagicParticles />
         <MagicalFireflies />
         <Butterflies />
       </Suspense>

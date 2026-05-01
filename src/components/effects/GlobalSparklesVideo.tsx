@@ -12,7 +12,7 @@ export function GlobalSparklesVideo() {
         playsInline
         preload="auto"
       >
-        <source src="/videos/all-overlay.mp4" type="video/mp4" />
+        <source src="/videos/golden-particles-overlay-mobile.mp4" type="video/mp4" />
       </video>
     </div>
   )
